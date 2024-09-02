@@ -6,31 +6,14 @@ import { useState, useEffect, setState } from 'react';
 
 const NewCustomer = () => {
 
-    const { state, addCredential, renderCredential } = useStore();
+    const { state, addCredential, loadCredentials, renderCredential } = useStore();
 
     const [customerName, setCustomerName] = useState('');
     const [countryCode, setCoutryCode] = useState('');
 
-    const [customerCredentials, setCustomerCredentials] = useState(null);
-
-    const loadCredentials = () => {
-      const storedCredentials = localStorage.getItem('customerCredentials');
-      if (storedCredentials) {
-        setCustomerCredentials(JSON.parse(storedCredentials));
-      } else {
-        console.log('No credentials exist');
-      }
-    };
-  
-    useEffect(() => {
-      loadCredentials();
-    }, []);
   
     // Use useEffect to call loadCredentials when the component mounts
-    useEffect(() => {
-      loadCredentials();
-    }, []);
-  
+    
 
     const createCredential = async (e) => {
         e.preventDefault();
@@ -38,10 +21,12 @@ const NewCustomer = () => {
         const credential = await fetch(
           `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid}`
         ).then((r) => r.text());
-      
-        console.log(credential);
 
-     //   addCredential(credential);
+        const storedCredentials = localStorage.getItem('customerCredentials');
+
+        console.log(storedCredentials)
+
+     // addCredential(credential);
       
       };
 
