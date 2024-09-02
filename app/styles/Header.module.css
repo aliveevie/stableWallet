@@ -15,8 +15,16 @@
   .menu-icon {
     width: 20px;
     height: 20px;
-    background-image: url('../../public/hamburger.svg'); 
-    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  
+  .menu-icon div {
+    width: 100%;
+    height: 2px;
+    background-color: white;
   }
   
   .username {
