@@ -208,6 +208,7 @@ const useStore = () => {
       console.error('Failed to initialize DID:', error);
     }
   }, []);
+  
 
   const loadCredentials = () => {
     const storedCredentials = localStorage.getItem('customerCredentials');
@@ -220,6 +221,7 @@ const useStore = () => {
       console.log('No credentials exist');
     }
   };
+
 
   const addCredential = (credential) => {
     const updatedCredentials = [...state.customerCredentials, credential];

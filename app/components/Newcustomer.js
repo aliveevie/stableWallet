@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import getCustomerDetails from '@/functions/getCustomer';
 import useStore from '@/functions/main';
-import { useState, useEffect, setState } from 'react';
+import { useState, useEffect } from 'react';
 
 const NewCustomer = () => {
 
@@ -10,10 +10,7 @@ const NewCustomer = () => {
 
     const [customerName, setCustomerName] = useState('');
     const [countryCode, setCoutryCode] = useState('');
-
-  
-    // Use useEffect to call loadCredentials when the component mounts
-    
+    const [error, setError] = useState('');
 
     const createCredential = async (e) => {
         e.preventDefault();
@@ -22,14 +19,13 @@ const NewCustomer = () => {
           `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid}`
         ).then((r) => r.text());
 
-        const storedCredentials = localStorage.getItem('customerCredentials');
-
-        console.log(storedCredentials)
-
-     // addCredential(credential);
-      
-      };
-
+        if(state.customerCredentials.length > 0){
+            setError("Credentials Already Exist");
+        } else {
+            addCredential(credential);
+            setError(''); // Clear error if no error occurs
+        }
+    };
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-900 rounded-lg p-6 w-full max-w-md mx-auto shadow-lg">
@@ -46,7 +42,7 @@ const NewCustomer = () => {
       <div className="text-white text-2xl font-bold mb-2 text-center">Explore Web3</div>
       <div className="text-gray-400 text-center mb-6">Step into the Future with StableWallet</div>
 
-      <form className="w-full" onSubmit={createCredential} >
+      <form className="w-full" onSubmit={createCredential}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-white mb-1">Name</label>
           <input
@@ -54,8 +50,8 @@ const NewCustomer = () => {
             id="name"
             placeholder="Enter your name"
             className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-            onChange={(e) =>  setCustomerName(e.target.value)}         
-         />
+            onChange={(e) => setCustomerName(e.target.value)}
+          />
         </div>
 
         <div className="mb-4">
@@ -66,9 +62,14 @@ const NewCustomer = () => {
             placeholder="Enter your country code"
             className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             onChange={(e) => setCoutryCode(e.target.value)}
-         />
+          />
         </div>
 
+        {error && (
+          <div className="mb-4 text-red-500 text-sm font-semibold">
+            {error}
+          </div>
+        )}
 
         <button
           type="submit"
@@ -77,6 +78,13 @@ const NewCustomer = () => {
           Create Wallet
         </button>
       </form>
+
+      <div className="mt-6 text-center">
+        <span className="text-gray-400">or</span>
+        <button className="block mt-2 text-green-500 font-semibold hover:underline">
+          Import Existing Wallet
+        </button>
+      </div>
     </div>
   );
 };
