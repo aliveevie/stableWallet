@@ -1,10 +1,12 @@
-import Image from "next/image";
+import styles from './styles/Mobile.module.css'
+
 
 export default function Home() {
   return (
-   
     <>
-      <h1>Hello World!</h1>
+      <div className={styles.container} >
+    
+      </div>
     </>
     
   );

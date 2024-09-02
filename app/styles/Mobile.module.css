@@ -1,0 +1,27 @@
+.container {
+    background-color: #1a1a1a; /* Light black background */
+    width: 360px; /* Typical Android phone width */
+    height: 640px; /* Typical Android phone height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px;
+    box-sizing: border-box;
+    border-radius: 20px; /* Optional: rounded corners to mimic a phone screen */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5); /* Optional: add shadow for more depth */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the container */
+  }
+  
+  @media (max-width: 360px) {
+    .container {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0; /* Remove rounded corners on very small screens */
+    }
+  }
+  
