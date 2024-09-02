@@ -1,30 +1,49 @@
-import styles from '../styles/NewCustomer.module.css';
+import Image from 'next/image';
 
 const NewCustomer = () => {
   return (
-    <div className={styles.container}>
-      <div className={styles.imageContainer}>
-        <img src="/path_to_astronaut_image.png" alt="Astronaut" className={styles.image} />
-      </div>
-      <div className={styles.title}>Explore Web3</div>
-      <div className={styles.subtitle}>Step into the Future with Meteor</div>
-
-      <div className={styles.formGroup}>
-        <input
-          type="text"
-          placeholder="Claim your identity"
-          className={styles.inputField}
+    <div className="flex flex-col justify-center items-center bg-gray-900 rounded-lg p-6 w-full max-w-md mx-auto shadow-lg">
+      <div className="w-full text-center mb-6">
+        <Image
+          src="/astronut.webp"
+          alt="Astronaut"
+          width={150}
+          height={150}
+          priority={true}
+          className="mx-auto"
         />
       </div>
-      <div className={styles.availability}>fairuser5139.near is available.</div>
+      <div className="text-white text-2xl font-bold mb-2 text-center">Explore Web3</div>
+      <div className="text-gray-400 text-center mb-6">Step into the Future with StableWallet</div>
 
-      <div className={styles.formGroup}>
-        <label className={styles.ledgerOption}>
-          <input type="checkbox" /> Use ledger device
-        </label>
-      </div>
+      <form className="w-full">
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-white mb-1">Name</label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter your name"
+            className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
 
-      <button className={styles.button}>Create Wallet</button>
+        <div className="mb-4">
+          <label htmlFor="countryCode" className="block text-sm font-medium text-white mb-1">Country Code</label>
+          <input
+            type="text"
+            id="countryCode"
+            placeholder="Enter your country code"
+            className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300"
+        >
+          Create Wallet
+        </button>
+      </form>
     </div>
   );
 };
