@@ -1,23 +1,50 @@
 "use client";
-
 import Image from 'next/image';
-import { useState } from 'react';
 import getCustomerDetails from '@/functions/getCustomer';
+import useStore from '@/functions/main';
+import { useState, useEffect, setState } from 'react';
 
 const NewCustomer = () => {
-  const [name, setName] = useState('');
-  const [countryCode, setCountryCode] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const customerDid = 'did:example:123456789abcdefghi'; // Example DID, replace with actual DID
-    try {
-      const data = await getCustomerDetails(name, countryCode, customerDid);
-      console.log('Customer Details:', data);
-    } catch (error) {
-      console.error('Error fetching customer details:', error);
-    }
-  };
+    const { state, addCredential, renderCredential } = useStore();
+
+    const [customerName, setCustomerName] = useState('');
+    const [countryCode, setCoutryCode] = useState('');
+
+    const [customerCredentials, setCustomerCredentials] = useState(null);
+
+    const loadCredentials = () => {
+      const storedCredentials = localStorage.getItem('customerCredentials');
+      if (storedCredentials) {
+        setCustomerCredentials(JSON.parse(storedCredentials));
+      } else {
+        console.log('No credentials exist');
+      }
+    };
+  
+    useEffect(() => {
+      loadCredentials();
+    }, []);
+  
+    // Use useEffect to call loadCredentials when the component mounts
+    useEffect(() => {
+      loadCredentials();
+    }, []);
+  
+
+    const createCredential = async (e) => {
+        e.preventDefault();
+        const customerDid = await state.customerDid.uri;
+        const credential = await fetch(
+          `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid}`
+        ).then((r) => r.text());
+      
+        console.log(credential);
+
+     //   addCredential(credential);
+      
+      };
+
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-900 rounded-lg p-6 w-full max-w-md mx-auto shadow-lg">
@@ -34,17 +61,16 @@ const NewCustomer = () => {
       <div className="text-white text-2xl font-bold mb-2 text-center">Explore Web3</div>
       <div className="text-gray-400 text-center mb-6">Step into the Future with StableWallet</div>
 
-      <form className="w-full" onSubmit={handleSubmit}>
+      <form className="w-full" onSubmit={createCredential} >
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-white mb-1">Name</label>
           <input
             type="text"
             id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
             className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+            onChange={(e) =>  setCustomerName(e.target.value)}         
+         />
         </div>
 
         <div className="mb-4">
@@ -52,12 +78,12 @@ const NewCustomer = () => {
           <input
             type="text"
             id="countryCode"
-            value={countryCode}
-            onChange={(e) => setCountryCode(e.target.value)}
             placeholder="Enter your country code"
             className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+            onChange={(e) => setCoutryCode(e.target.value)}
+         />
         </div>
+
 
         <button
           type="submit"
