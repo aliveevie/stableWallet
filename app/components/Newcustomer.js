@@ -7,25 +7,34 @@ import { useState, useEffect } from 'react';
 const NewCustomer = () => {
 
     const { state, addCredential, loadCredentials, renderCredential } = useStore();
+    const [uri, setUri] = useState(null);
 
     const [customerName, setCustomerName] = useState('');
     const [countryCode, setCoutryCode] = useState('');
     const [error, setError] = useState('');
 
     const createCredential = async (e) => {
-        e.preventDefault();
-        const customerDid = await state.customerDid.uri;
-        const credential = await fetch(
-          `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid}`
-        ).then((r) => r.text());
-
-        if(state.customerCredentials.length > 0){
-            setError("Credentials Already Exist");
-        } else {
-            addCredential(credential);
-            setError(''); // Clear error if no error occurs
-        }
+      e.preventDefault();
+      
+      const customerDid = await state.customerDid;
+      if (customerDid) {
+        setUri(customerDid.uri);
+      }
+    
+      const response = await fetch(
+        `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${uri}`
+      );
+    
+      const credential = await response.text();
+      console.log(credential)
+      
+      addCredential(credential);
+      if(credential){
+              console.log(state.customerCredentials)
+      }
+      
     };
+    
 
   return (
     <div className="flex flex-col justify-center items-center bg-gray-900 rounded-lg p-6 w-full max-w-md mx-auto shadow-lg">
