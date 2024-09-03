@@ -2,7 +2,6 @@
     background-color: #1a1a1a; /* Light black background */
     width: 360px; /* Typical Android phone width */
     height: 640px; /* Typical Android phone height */
-    overflow-y: auto; /* Enable vertical scrolling */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

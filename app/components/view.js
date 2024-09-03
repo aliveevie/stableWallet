@@ -11,20 +11,7 @@ const View = () => {
 
   return (
     <div className="min-h-screen text-white p-4">
-      {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
-        <FaBars className="text-2xl cursor-pointer" />
-        <div className="flex items-center">
-          <span className="mr-4 text-lg font-semibold">Ibrahim</span>
-          <Image
-            src="/stablewallet-icon.png" // Replace with the actual path to the icon file
-            alt="StableWallet Icon"
-            width={40}
-            height={40}
-          />
-        </div>
-      </div>
-
+     
       {/* Balance Section */}
       <div className="flex justify-center items-center mb-6">
         <div className="text-center bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xs">
@@ -71,13 +58,7 @@ const View = () => {
         </div>
       </div>
 
-      {/* Footer Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 flex justify-around shadow-inner">
-        <FaWallet className="text-2xl cursor-pointer text-green-500" />
-        <FaPaperPlane className="text-2xl cursor-pointer text-blue-500" />
-        <FaHistory className="text-2xl cursor-pointer text-yellow-500" />
-        <FaBars className="text-2xl cursor-pointer text-gray-400" />
-      </div>
+ 
     </div>
   );
 };

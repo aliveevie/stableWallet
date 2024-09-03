@@ -5,6 +5,7 @@ import Header from './components/Header';
 import NewCustomer from './components/Newcustomer';
 import StoreCredentials from './components/storeCred';
 import View from './components/view';
+import Footer from './components/footer';
 
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
     <>
       <div className={styles.container} >
             <View />
+            <Footer />
       </div>
     </>
     
