@@ -9,14 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tbdex/http-client": "1.1.0",
+    "@web5/common": "1.0.0",
+    "@web5/credentials": "1.1.0",
+    "@web5/crypto": "1.0.0",
+    "@web5/dids": "1.1.1",
+    "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.7",
-    "@tbdex/http-client": "1.1.0",
-    "@web5/credentials": "1.1.0",
-    "@web5/dids": "1.1.1",
-    "@web5/common": "1.0.0",
-    "@web5/crypto": "1.0.0"
+    "react-icons": "^5.3.0"
   },
   "devDependencies": {
     "postcss": "^8",
