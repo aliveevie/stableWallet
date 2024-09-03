@@ -415,6 +415,7 @@ const useStore = () => {
     addClose,
     getOfferingById,
     pollExchanges,
+    initializeDid
   };
 };
 
