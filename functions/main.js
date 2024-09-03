@@ -390,8 +390,8 @@ const useStore = () => {
       await fetchOfferings();
       console.log('Initializing DID...');
       await initializeDid();
-      console.log('Loading credentials...');
-      loadCredentials();
+    //  console.log('Loading credentials...');
+   //   loadCredentials();
     };
     init();
   }, [fetchOfferings, initializeDid]);
@@ -407,6 +407,7 @@ const useStore = () => {
     satisfiesOfferingRequirements,
     addCredential,
     renderCredential,
+    loadCredentials,
     createExchange,
     fetchExchanges,
     renderOrderStatus,
