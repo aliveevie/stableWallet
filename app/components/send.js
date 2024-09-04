@@ -1,16 +1,20 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import useStore from '@/functions/main';  // Import your store functions
+import useStore from '../../functions/main';  // Import your store functions
 import Loader from './loader';  // Import the loader component
 
 const Send = () => {
   const { state } = useStore();
   const [walletAddress, setWalletAddress] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('');
   const [crypto, setCrypto] = useState('USDT');
   const [payIn, setPayIn] = useState([]);
   const [payout, setPayout] = useState([]);
   const [loading, setLoading] = useState(true); // Track loading state
+  const [ offerings, setOffering ] = useState([]);
+  const [payoutOptions, setPayoutOptions] = useState([]); // List of Payout currencies based on PayIn
+
+
 
   const handleSend = () => {
     // Handle the send action, for example, trigger a transaction
@@ -25,19 +29,31 @@ const Send = () => {
     async function getOffering() {
       if (state.payinCurrencies.length > 0 || state.payoutCurrencies.length > 0) {
         setPayIn(state.payinCurrencies);
-        setPayout(state.payoutCurrencies);
+      //  setPayout(state.payoutCurrencies);
         setLoading(false);  // Stop loading when data is fetched
+        setOffering(state.offerings)
+     //   console.log(offerings)
       }
     }
 
     getOffering();
   }, [state]);
 
+    useEffect(() => {
+    if (currency && offerings.length > 0) {
+      const filteredOffering = offerings.find(
+        (offering) => offering.data.payin.currencyCode === currency
+      );
+      console.log(filteredOffering)
+      if (filteredOffering) {
+        setPayout(filteredOffering.data.payout ? [filteredOffering.data.payout.currencyCode] : []);
+      }
+    }
+  }, [currency, offerings]);
+
   if (loading) {
     return (
-    
         <Loader /> 
-      
     );
   }
 

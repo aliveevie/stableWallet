@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaArrowUp, FaArrowDown, FaPaperPlane } from 'react-icons/fa';
-import useStore from '@/functions/main';
+import useStore from '../../functions/main';
 import Link from 'next/link';
 
 const View = () => {

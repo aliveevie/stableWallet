@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import useStore from '@/functions/main';
+import useStore from '../../functions/main';
 import StoreCredentials from './storeCred';
 
 const NewCustomer = () => {
