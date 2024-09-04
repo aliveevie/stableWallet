@@ -1,7 +1,11 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+// import useStore from '@functions/main';
+import useStore from '@/functions/main';
+
 
 const Send = () => {
+  const { state } = useStore();
   const [walletAddress, setWalletAddress] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [crypto, setCrypto] = useState('USDT');
@@ -14,6 +18,19 @@ const Send = () => {
       crypto,
     });
   };
+
+  useEffect(() => {
+
+   async function getOffering(){
+      const offering = await state.customerDid;
+      if(offering){
+        console.log(state)
+      }
+    }
+
+    getOffering();
+
+  }, [state])
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">

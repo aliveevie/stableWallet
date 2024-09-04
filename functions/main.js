@@ -28,7 +28,6 @@ const mockProviderDids = {
   }
 };
 
-
 const useStore = () => {
   const [state, setState] = useState({
     balance: parseFloat(localStorage.getItem('walletBalance')) || 100,
@@ -56,6 +55,7 @@ const useStore = () => {
         const offerings = await TbdexHttpClient.getOfferings({
           pfiDid: pfiUri,
         });
+      //  console.log(offerings)
         allOfferings.push(...offerings);
       }
 
