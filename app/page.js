@@ -17,7 +17,8 @@ export default  function Home() {
   const { state, renderCredential, loadCredentials, initializeDid } = useStore();
   const [showStart, setShowStart] = useState(false);
   const [hello, setHello] = useState(false);
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading ] = useState(false);
+  const [found, setFound] = useState(null);
 
 
   useEffect(() => {
@@ -26,16 +27,16 @@ export default  function Home() {
 
       const cred = state.customerCredentials;
     
-
-      const Notfound = await customer.uri == "yes";
-     
-    
-      
+      if(customer){
+        setFound(state.customerDid.uri);
+        console.log(found)
+      }
+       
       if(customer){
          setHello(true)
          setLoading(true)
          setShowStart(true)
-      }if(!Notfound && !customer){
+      }if(!found){
         console.log("Not working!")
         setHello(false)
         setLoading(false)
@@ -46,13 +47,7 @@ export default  function Home() {
       customerfunction();
   }, [state.customerDid, state.customerCredentials]);
 
-  const parsedCredentials = useMemo(async () => {
-    return state.customerCredentials.map(jwt => {
-      const credential = renderCredential(jwt);
-    
-      return credential; // Make sure to return the credential for rendering or other uses
-    });
-  }, [state.customerCredentials]); 
+  
 
  
 
