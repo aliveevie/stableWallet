@@ -14,48 +14,10 @@ import { useMemo } from 'react';
 
 
 export default  function Home() {
-  const { state, renderCredential, loadCredentials, initializeDid } = useStore();
-  const [showStart, setShowStart] = useState(false);
-  const [hello, setHello] = useState(false);
-  const [loading, setLoading ] = useState(false);
-  const [found, setFound] = useState(null);
-
-
-  useEffect(() => {
-    const customerfunction = async () => {
-      const customer = await state.customerDid;
-
-      const cred = state.customerCredentials;
-       
-      if(customer){
-         setHello(true)
-         setLoading(true)
-         setShowStart(true)
-         cred.map(jwt => console.log(renderCredential(jwt)))
-      }else{
-        setHello(false)
-        setLoading(false)
-        setShowStart(true)
-      }
-    }
-
-      customerfunction();
-  }, [state.customerDid, state.customerCredentials]);
-
-
-
-  return (
+    return (
     <>
-      <div className={styles.container}>
-
-        {/**
-         *  { !hello && !loading && !showStart && <Loader /> }
-            { hello && loading && showStart && <View />}
-         * 
-         */}
-
-        <NewCustomer />
-
+      <div className={styles.container} >
+            <View />
       </div>
     </>
   );

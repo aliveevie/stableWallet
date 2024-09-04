@@ -1,6 +1,6 @@
 import NewCustomer from "../components/Newcustomer"
 
-export const Page = () => {
+export default function() {
         return <>
                 <NewCustomer />
         </>

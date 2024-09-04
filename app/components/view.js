@@ -1,8 +1,14 @@
 import React from 'react';
 import { FaBars, FaArrowUp, FaArrowDown, FaWallet, FaPaperPlane, FaDownload, FaHistory } from 'react-icons/fa';
 import Image from 'next/image';
+import Footer from './footer';
 
 const View = () => {
+
+
+
+
+
   const transactions = [
     { id: 1, type: 'Sent', amount: '-$200', date: '2024-01-01' },
     { id: 2, type: 'Received', amount: '+$500', date: '2024-01-02' },
@@ -10,8 +16,8 @@ const View = () => {
   ];
 
   return (
-    <div className="min-h-screen text-white p-4">
-     
+    <><div className="min-h-screen text-white p-4">
+
       {/* Balance Section */}
       <div className="flex justify-center items-center mb-6">
         <div className="text-center bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xs">
@@ -57,9 +63,8 @@ const View = () => {
           ))}
         </div>
       </div>
-
- 
-    </div>
+    </div><Footer />
+    </>
   );
 };
 
