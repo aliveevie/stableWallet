@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FaBars, FaArrowUp, FaArrowDown, FaWallet, FaPaperPlane, FaDownload, FaHistory } from 'react-icons/fa';
-import Image from 'next/image';
-import Footer from './footer';
+import { FaArrowUp, FaArrowDown, FaPaperPlane } from 'react-icons/fa';
 import useStore from '@/functions/main';
 import Link from 'next/link';
 
 const View = () => {
-  const { state, addCredential } = useStore();
+  const { state } = useStore();
   const [sign, setSign] = useState(true);
 
   useEffect(() => {
@@ -14,7 +12,6 @@ const View = () => {
       const details = state.customerDid;
       if (details) {
         setSign(false);
-        console.log(details)
       }
     };
     handleSign();
@@ -27,10 +24,10 @@ const View = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col text-white p-4 overflow-y-auto">
+    <div  className="flex flex-col justify-center items-center bg-blue-900 rounded-lg p-6 w-full max-w-md mx-auto shadow-lg">
       {/* Get Credential Button */}
       {sign && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-4">
           <Link href="/create">
             <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300">
               Get Credential
@@ -40,33 +37,31 @@ const View = () => {
       )}
 
       {/* Balance Section */}
-      <div className="flex justify-center items-center mt-10 mb-6">
-        <div className="text-center bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xs">
-          <h2 className="text-xl font-bold mb-2">Balance</h2>
-          <p className="text-3xl font-semibold">$3,450</p> {/* Replace with actual balance */}
-        </div>
+      <div className="w-full rounded-lg shadow-lg p-6 text-center mb-6">
+        <h2 className="text-xl font-bold mb-2">Balance</h2>
+        <p className="text-4xl font-semibold">${state.balance}</p> {/* Replace with actual balance */}
       </div>
 
       {/* Send/Receive Section */}
-      <div className="flex justify-between items-center mb-6">
-        <button className="flex items-center justify-center w-1/2 bg-green-500 p-4 rounded-lg shadow-lg mr-2 hover:bg-green-600 transition duration-300">
-          <FaPaperPlane className="text-2xl mr-2" />
-          <span>Send</span>
-        </button>
-        <button className="flex items-center justify-center w-1/2 bg-blue-500 p-4 rounded-lg shadow-lg ml-2 hover:bg-blue-600 transition duration-300">
-          <FaDownload className="text-2xl mr-2" />
-          <span>Receive</span>
+      <div className="w-full bg-gray-800 rounded-lg shadow-lg p-6 mb-6 flex flex-col items-center justify-center">
+      
+        <button className="bg-green-500 w-full py-3 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300 flex justify-center items-center">
+          <FaPaperPlane className="text-xl mr-2" />
+          <Link href="/send" >
+          Send
+      </Link>
+        
         </button>
       </div>
 
       {/* Transaction History Section */}
-      <div>
+      <div className="w-full">
         <h3 className="text-xl font-bold mb-4">Transaction History</h3>
         <div className="space-y-4">
           {transactions.map((transaction) => (
             <div
               key={transaction.id}
-              className="flex justify-between items-center p-4 bg-gray-800 rounded-lg shadow-md"
+              className="flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow-md"
             >
               <div className="flex items-center">
                 {transaction.type === 'Sent' ? (
