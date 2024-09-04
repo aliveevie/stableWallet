@@ -1,14 +1,16 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-// import useStore from '@functions/main';
-import useStore from '@/functions/main';
-
+import useStore from '@/functions/main';  // Import your store functions
+import Loader from './loader';  // Import the loader component
 
 const Send = () => {
   const { state } = useStore();
   const [walletAddress, setWalletAddress] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [crypto, setCrypto] = useState('USDT');
+  const [payIn, setPayIn] = useState([]);
+  const [payout, setPayout] = useState([]);
+  const [loading, setLoading] = useState(true); // Track loading state
 
   const handleSend = () => {
     // Handle the send action, for example, trigger a transaction
@@ -20,17 +22,24 @@ const Send = () => {
   };
 
   useEffect(() => {
-
-   async function getOffering(){
-      const offering = await state.customerDid;
-      if(offering){
-        console.log(state)
+    async function getOffering() {
+      if (state.payinCurrencies.length > 0 || state.payoutCurrencies.length > 0) {
+        setPayIn(state.payinCurrencies);
+        setPayout(state.payoutCurrencies);
+        setLoading(false);  // Stop loading when data is fetched
       }
     }
 
     getOffering();
+  }, [state]);
 
-  }, [state])
+  if (loading) {
+    return (
+    
+        <Loader /> 
+      
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
@@ -52,7 +61,7 @@ const Send = () => {
 
       <div className="mb-4">
         <label htmlFor="currency" className="block text-sm font-medium mb-2">
-          Choose Currency
+          From (Currency)
         </label>
         <select
           id="currency"
@@ -60,16 +69,15 @@ const Send = () => {
           onChange={(e) => setCurrency(e.target.value)}
           className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
         >
-          <option value="NGN">NGN</option>
-          <option value="GHC">GHC</option>
-          <option value="USD">USD</option>
-          {/* Add more currencies as needed */}
+          {payIn.map((option) => (
+            <option key={option} value={option}>{option}</option>
+          ))}
         </select>
       </div>
 
       <div className="mb-6">
         <label htmlFor="crypto" className="block text-sm font-medium mb-2">
-          Choose Cryptocurrency
+          To (Cryptocurrency)
         </label>
         <select
           id="crypto"
@@ -77,10 +85,9 @@ const Send = () => {
           onChange={(e) => setCrypto(e.target.value)}
           className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
         >
-          <option value="USDT">USDT</option>
-          <option value="BTC">BTC</option>
-          <option value="ZED">ZED</option>
-          {/* Add more cryptocurrencies as needed */}
+          {payout.map((option) => (
+            <option key={option} value={option}>{option}</option>
+          ))}
         </select>
       </div>
 
