@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBars, FaArrowUp, FaArrowDown, FaWallet, FaPaperPlane, FaDownload, FaHistory } from 'react-icons/fa';
 import Image from 'next/image';
 import Footer from './footer';
+import useStore from '@/functions/main';
+import Link from 'next/link';
 
 const View = () => {
+  const { state, addCredential } = useStore();
+  const [sign, setSign] = useState(true);
 
-
-
-
+  useEffect(() => {
+    const handleSign = async () => {
+      const details = state.customerDid;
+      if (details) {
+        setSign(false);
+        console.log(details)
+      }
+    };
+    handleSign();
+  }, [state.customerDid]);
 
   const transactions = [
     { id: 1, type: 'Sent', amount: '-$200', date: '2024-01-01' },
@@ -16,10 +27,20 @@ const View = () => {
   ];
 
   return (
-    <><div className="min-h-screen text-white p-4">
+    <div className="min-h-screen flex flex-col text-white p-4 overflow-y-auto">
+      {/* Get Credential Button */}
+      {sign && (
+        <div className="flex justify-center mt-6">
+          <Link href="/create">
+            <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300">
+              Get Credential
+            </button>
+          </Link>
+        </div>
+      )}
 
       {/* Balance Section */}
-      <div className="flex justify-center items-center mb-6">
+      <div className="flex justify-center items-center mt-10 mb-6">
         <div className="text-center bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-xs">
           <h2 className="text-xl font-bold mb-2">Balance</h2>
           <p className="text-3xl font-semibold">$3,450</p> {/* Replace with actual balance */}
@@ -63,8 +84,7 @@ const View = () => {
           ))}
         </div>
       </div>
-    </div><Footer />
-    </>
+    </div>
   );
 };
 
