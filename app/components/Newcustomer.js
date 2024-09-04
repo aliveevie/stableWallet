@@ -26,14 +26,14 @@ const NewCustomer = () => {
       );
     
       const credential = await response.text();
-      console.log(credential)
+    //  console.log(credential)
       
       addCredential(credential);
       if(credential){
-              console.log(state.customerCredentials)
-      }
-      
-    };
+          state.customerCredentials.map(jwt => console.log(renderCredential(jwt)))
+    }
+
+  }
     
 
   return (

@@ -230,6 +230,7 @@ const useStore = () => {
       customerCredentials: updatedCredentials,
     }));
     localStorage.setItem('customerCredentials', JSON.stringify(updatedCredentials));
+    
   };
 
   const renderCredential = (credentialJwt) => {
@@ -386,12 +387,14 @@ const useStore = () => {
 
   useEffect(() => {
     const init = async () => {
-      console.log('Fetching offerings...');
-      await fetchOfferings();
       console.log('Initializing DID...');
       await initializeDid();
-    //  console.log('Loading credentials...');
-   //   loadCredentials();
+      console.log('Loading credentials...');
+      loadCredentials();
+      console.log('Fetching offerings...');
+      await fetchOfferings();
+   // console.log("Clearing Local Storage!");
+   // localStorage.clear();
     };
     init();
   }, [fetchOfferings, initializeDid]);

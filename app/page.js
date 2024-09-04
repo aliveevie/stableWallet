@@ -23,21 +23,16 @@ export default  function Home() {
 
   useEffect(() => {
     const customerfunction = async () => {
-      const customer = await state.customerDid
+      const customer = await state.customerDid;
 
       const cred = state.customerCredentials;
-    
-      if(customer){
-        setFound(state.customerDid.uri);
-        console.log(found)
-      }
        
       if(customer){
          setHello(true)
          setLoading(true)
          setShowStart(true)
-      }if(!found){
-        console.log("Not working!")
+         cred.map(jwt => console.log(renderCredential(jwt)))
+      }else{
         setHello(false)
         setLoading(false)
         setShowStart(true)
@@ -47,9 +42,7 @@ export default  function Home() {
       customerfunction();
   }, [state.customerDid, state.customerCredentials]);
 
-  
 
- 
 
   return (
     <>
