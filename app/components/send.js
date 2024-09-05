@@ -11,7 +11,7 @@ const Send = () => {
   const [payIn, setPayIn] = useState([]);
   const [payout, setPayout] = useState([]);
   const [loading, setLoading] = useState(true); // Track loading state
-  const [ offerings, setOffering ] = useState([]);
+  const [ offerings, setOfferings ] = useState([]);
   const [payoutOptions, setPayoutOptions] = useState([]); // List of Payout currencies based on PayIn
 
 
@@ -31,25 +31,26 @@ const Send = () => {
         setPayIn(state.payinCurrencies);
       //  setPayout(state.payoutCurrencies);
         setLoading(false);  // Stop loading when data is fetched
-        setOffering(state.offerings)
-     //   console.log(offerings)
+        setOfferings(state.offerings)
+       // offerings.map(offering => console.log(offering.data.payin.currencyCode, " , ", offering.data.payout.currencyCode ))
+
+    
       }
     }
 
     getOffering();
   }, [state]);
 
-    useEffect(() => {
+  useEffect(() => {
     if (currency && offerings.length > 0) {
-      const filteredOffering = offerings.find(
-        (offering) => offering.data.payin.currencyCode === currency
-      );
-      console.log(filteredOffering)
-      if (filteredOffering) {
-        setPayout(filteredOffering.data.payout ? [filteredOffering.data.payout.currencyCode] : []);
-      }
+      const filteredOffering = offerings
+        .filter((offering) => offering.data.payin.currencyCode === currency)
+        .map((offering) => offering.data.payout.currencyCode);
+      setPayout([...new Set(filteredOffering)]); // Ensure unique payout options
     }
   }, [currency, offerings]);
+
+
 
   if (loading) {
     return (
