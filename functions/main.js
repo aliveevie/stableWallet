@@ -9,24 +9,57 @@ const mockProviderDids = {
   aquafinance_capital: {
     uri: 'did:dht:3fkz5ssfxbriwks3iy5nwys3q5kyx64ettp9wfn1yfekfkiguj1y',
     name: 'aquafinance_capital',
-    description: 'Provide offerings to exchange to GHS'
+    description: `🏦 AquaFinance Capital
+
+DID: did:dht:3fkz5ssfxbriwks3iy5nwys3q5kyx64ettp9wfn1yfekfkiguj1y
+
+Offerings:
+- GHS to USDC
+- NGN to KES
+- KES to USD
+- USD to KES`
   },
   flowback_financial: {
     uri: 'did:dht:zkp5gbsqgzn69b3y5dtt5nnpjtdq6sxyukpzo68npsf79bmtb9zy',
     name: 'flowback_financial',
-    description: 'Provide offerings to exchange to USD and EUR'
+    description: `🏦 Flowback Financial
+
+DID: did:dht:zkp5gbsqgzn69b3y5dtt5nnpjtdq6sxyukpzo68npsf79bmtb9zy
+
+Offerings:
+- USD to EUR
+- EUR to USD
+- USD to GBP
+- USD to BTC`
   },
   vertex_liquid_assets: {
     uri: 'did:dht:enwguxo8uzqexq14xupe4o9ymxw3nzeb9uug5ijkj9rhfbf1oy5y',
     name: 'vertex_liquid_assets',
-    description: 'Provide offerings to exchange to EUR'
+    description: `🏦 Vertex Liquid Assets
+
+DID: did:dht:enwguxo8uzqexq14xupe4o9ymxw3nzeb9uug5ijkj9rhfbf1oy5y
+
+Offerings:
+- EUR to USD
+- EUR to USDC
+- USD to EUR
+- EUR to GBP`
   },
   titanium_trust: {
     uri: 'did:dht:ozn5c51ruo7z63u1h748ug7rw5p1mq3853ytrd5gatu9a8mm8f1o',
     name: 'titanium_trust',
-    description: 'Provide offerings to exchange to USD'
+    description: `🏦 Titanium Trust
+
+DID: did:dht:ozn5c51ruo7z63u1h748ug7rw5p1mq3853ytrd5gatu9a8mm8f1o
+
+Offerings:
+- USD to AUD
+- USD to GBP
+- USD to KES
+- USD to MXN`
   }
 };
+
 
 const useStore = () => {
   const [state, setState] = useState({

@@ -16,6 +16,9 @@ const Send = () => {
   const [payoutOptions, setPayoutOptions] = useState([]); // List of Payout currencies based on PayIn
   const [description, setDescription] = useState('');
   const [showBox, setShowBox] = useState(false);
+  const [payoutCurr, setPayoutCurr] = useState('');
+  const [newSetOfOfferings, setNewSetOfOffering] = useState([]);
+
 
   const handleSend = () => {
     // Handle the send action, for example, trigger a transaction
@@ -41,10 +44,17 @@ const Send = () => {
     if (currency && offerings.length > 0) {
       const filteredOffering = offerings
         .filter((offering) => offering.data.payin.currencyCode === currency)
-        .map((offering) => offering.data.payout.currencyCode);
-        setPayout([...new Set(filteredOffering)]); // Ensure unique payout options
-        console.log(state.pfiAllowlist)
+      //  .map((offering) => offering.data.payout.currencyCode);
+        console.log(state.pfiAllowlist);
+        if(filteredOffering){
+          setNewSetOfOffering(filteredOffering)
+          console.log(filteredOffering)
+        }
+        
     }
+
+    
+    
   }, [currency, offerings]);
 
   if (loading) {
@@ -81,7 +91,7 @@ const Send = () => {
         <select
           id="crypto"
           value={crypto}
-          onChange={(e) => setCrypto(e.target.value)}
+          onChange={(e) => setPayoutCurr(e.target.value)}
           className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
         >
           <option disabled value="" key="uniques" >Select currency</option>
