@@ -5,7 +5,7 @@ import Loader from './loader';  // Import the loader component
 
 const Send = () => {
   const { state } = useStore();
-  const [walletAddress, setWalletAddress] = useState('');
+  const [walletAddress, setWalletAddress] = useState(false);
   const [currency, setCurrency] = useState('');  // PayIn currency
   const [crypto, setCrypto] = useState('');  // Payout currency
   const [payIn, setPayIn] = useState([]);  // PayIn currencies list
@@ -14,11 +14,14 @@ const Send = () => {
   const [offerings, setOfferings] = useState([]);  // Offerings from state
   const [description, setDescription] = useState('');  // Description for selected currency
   const [payoutCurr, setPayoutCurr] = useState('');  // Selected Payout currency
-  const [newSetOfOfferings, setNewSetOfOffering] = useState([]);  // Filtered offerings for the selected currency
+  const [newSetOfOfferings, setNewSetOfOffering] = useState([]);  // Filtered offerings for the selected currency;
+  const [showPFI, setShowPFI] = useState([]);
+  const [uri, setUri] = useState('');
+  const [payPerUnit, setPayPerUnit] = useState([]);
+
 
   const handleSend = () => {
-    // Handle the send action, for example, trigger a transaction
-    console.log(`Sending from ${currency} to ${payoutCurr}`);  // Log the selected currencies
+
   };
 
   useEffect(() => {
@@ -64,9 +67,17 @@ const Send = () => {
       );
       if (selectedOffering) {
         setDescription(selectedOffering.data.description);  // Set the description for the matching offering
-        console.log('Description:', selectedOffering.data.description);  // Log the description
+       // console.log('Description:', selectedOffering.data.description);  // Log the description
+        setPayPerUnit(selectedOffering.data.payoutUnitsPerPayinUnit)
+        setUri(selectedOffering.metadata.from)
+        console.log(uri, " , ", payPerUnit)
+        
       }else{
           setDescription(newSetOfOfferings[0].data.description)
+          setPayPerUnit(newSetOfOfferings[0].data.paypayoutUnitsPerPayinUnit)
+          //setUri(newSetOfOfferings[0].metadata)
+          console.log(newSetOfOfferings[0])
+          
       }
     }
   }, [payoutCurr, newSetOfOfferings]);  // Trigger this when payoutCurr or newSetOfOfferings change
@@ -129,6 +140,9 @@ const Send = () => {
         <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
           <h3 className="text-lg font-bold mb-2">Description:</h3>
           <p>{description}</p>
+          <div>
+          
+          </div>
         </div>
       )}
     </div>
