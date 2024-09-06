@@ -54,34 +54,45 @@ const Send = () => {
       // Set filtered offerings for further use if needed
       if (filteredOffering.length > 0) {
         setNewSetOfOffering(filteredOffering);
-        console.log('Filtered Offering:', filteredOffering);  // Debug log to check the filtered offering
+     //   console.log('Filtered Offering:', filteredOffering);  // Debug log to check the filtered offering
       }
     }
   }, [currency, offerings]);  // Trigger this when currency or offerings change
 
+
   useEffect(() => {
-    // When both PayIn and Payout currencies are selected, find the correct description
     if (currency && payoutCurr && newSetOfOfferings.length > 0) {
-      const selectedOffering = newSetOfOfferings.find(
+      const selectedOfferings = newSetOfOfferings.filter(
         (offering) => offering.data.payout.currencyCode === payoutCurr
       );
-      if (selectedOffering) {
-        setDescription(selectedOffering.data.description);  // Set the description for the matching offering
-       // console.log('Description:', selectedOffering.data.description);  // Log the description
-        setPayPerUnit(selectedOffering.data.payoutUnitsPerPayinUnit)
-        setUri(selectedOffering.metadata.from)
-        console.log(uri, " , ", payPerUnit)
-        
-      }else{
-          setDescription(newSetOfOfferings[0].data.description)
-          setPayPerUnit(newSetOfOfferings[0].data.paypayoutUnitsPerPayinUnit)
-          //setUri(newSetOfOfferings[0].metadata)
-          console.log(newSetOfOfferings[0])
+  
+      if (selectedOfferings.length > 0) {
+        // Iterate over each offering, find the matching PFI, and store relevant info
+        const matchedPFIs = selectedOfferings.map((offering) => {
+          const matchedPFI = state.pfiAllowlist.find(
+            (pfi) => pfi.pfiUri === offering.metadata.from
+          );
           
+          if (matchedPFI) {
+            return {
+              pfiName: matchedPFI.pfiName,
+              payPerUnit: offering.data.payoutUnitsPerPayinUnit, // Set the pay per unit (exchange rate)
+            };
+          }
+          return null; // Handle the case where no matching PFI is found
+        }).filter(Boolean); // Remove null entries
+  
+        if (matchedPFIs.length > 0) {
+          setShowPFI(matchedPFIs);  // Set the matched PFIs and their exchange rates
+          setDescription(selectedOfferings[0].data.description);  // Set the description for the first offering
+          setPayPerUnit(selectedOfferings[0].data.payoutUnitsPerPayinUnit);  // Set PayPerUnit for display
+        }
+      } else {
+        setDescription('No offering available for the selected currency pair.');  // Fallback description
       }
     }
-  }, [payoutCurr, newSetOfOfferings]);  // Trigger this when payoutCurr or newSetOfOfferings change
-
+  }, [currency, payoutCurr, newSetOfOfferings, state.pfiAllowlist]);
+  
 
 
   if (loading) {
@@ -135,16 +146,28 @@ const Send = () => {
         Continue
       </button>
 
-      {/* Show the description */}
       {description && (
-        <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
-          <h3 className="text-lg font-bold mb-2">Description:</h3>
-          <p>{description}</p>
-          <div>
-          
-          </div>
+  <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
+    <h3 className="text-lg font-bold mb-2">Description:</h3>
+    <p>{description}</p>
+
+    {showPFI.length > 0 && (
+      <>
+        <h4 className="text-md font-semibold mt-4">Exchange Rate Offerings:</h4>
+        <div className="mt-4">
+          <ul>
+            {showPFI.map((pfi, index) => (
+              <li key={index} className="p-4 bg-gray-700 rounded-lg mb-2">
+                <div className="font-semibold">{pfi.pfiName}</div>
+                <div className="text-sm text-blue-400">{pfi.payPerUnit} {payoutCurr} for 1 {currency}</div>
+              </li>
+            ))}
+          </ul>
         </div>
-      )}
+      </>
+    )}
+  </div>
+)}
     </div>
   );
 };
