@@ -64,12 +64,14 @@ const Send = () => {
     // When both PayIn and Payout currencies are selected, find the correct description
     if (currency && payoutCurr && newSetOfOfferings.length > 0) {
       const selectedOffering = newSetOfOfferings.filter(
-        (offering) => offering.data.payout.currencyCode === payoutCurr
+        (offering) => 
+          offering.data.payout.currencyCode === payoutCurr &&  // Match Payout currency
+        offering.data.payin.currencyCode === currency        // Match PayIn currency
       );
       if (selectedOffering.length > 0) {
       //  console.log(selectedOffering)
       //  setDescription(selectedOffering.data.description);  // Set the description for the matching offering
-      // console.log('Description:', selectedOffering.data.description);  // Log the description
+     //  console.log('Description:', selectedOffering.data.description);  // Log the description
      //   setPayPerUnit(selectedOffering.data.payoutUnitsPerPayinUnit)
      //   setUri(selectedOffering.metadata.from)
      const matchedPFIs = selectedOffering.map((offering) => {
@@ -78,16 +80,27 @@ const Send = () => {
           )
 
         if(matchedPFI){
-            console.log(matchedPFI)
+          return {
+            pfiName: matchedPFI.pfiName,  // PFI Name
+            payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
+          };
         }
-     })
+     }).filter(Boolean);
 
-    
-
-      }
-      
+        const uniquePFIs = matchedPFIs.filter((pfi, index, self) =>
+          index === self.findIndex((t) => t.pfiName === pfi.pfiName)
+        );
+        setShowPFI(uniquePFIs);  // Set unique PFIs to show
+        // Set the description for the first offering
+        setDescription(selectedOffering[0].data.description);
+        console.log("96",currency, " , ", payoutCurr)
+  }
+  
       else{
-        if(newSetOfOfferings[0].data.description){
+
+      /* 
+      *
+      * if(newSetOfOfferings[0].data.description){
           setDescription(newSetOfOfferings[0].data.description)
           setPayPerUnit(newSetOfOfferings[0].data.paypayoutUnitsPerPayinUnit)
           setUri(newSetOfOfferings[0].metadata.from)
@@ -99,10 +112,36 @@ const Send = () => {
               }
             }
           }
-        } 
+        } */
+
+        const matchedPFIs = newSetOfOfferings.map((offering) => {
+            const matchedPFI = state.pfiAllowlist.find(
+              (pfi) => pfi.pfiUri === offering.metadata.from
+            )
+  
+          if(matchedPFI){
+            return {
+              pfiName: matchedPFI.pfiName,  // PFI Name
+              payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
+            
+            };
+          }
+       }).filter(Boolean);
+  
+     if(matchedPFIs.length > 0){
+          
+      setDescription(newSetOfOfferings[0].data.description);
+      const uniquePFIs = matchedPFIs.filter((pfi, index, self) =>
+        index === self.findIndex((t) => t.pfiName === pfi.pfiName)
+      );
+      setShowPFI(uniquePFIs);  // Set unique PFIs to show
+      console.log(uniquePFIs);
+      console.log("138",currency, " , ", payoutCurr)
+
+    }
       }
     }
-  }, [payoutCurr, newSetOfOfferings, uri, payPerUnit, state, showPFI]);  // Trigger this when payoutCurr or newSetOfOfferings change
+  }, [newSetOfOfferings, uri, payPerUnit, state.pfiAllowlist, currency, payoutCurr]);  // Trigger this when payoutCurr or newSetOfOfferings change
 
 
   if (loading) {
