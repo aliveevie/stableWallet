@@ -18,6 +18,7 @@ const Send = () => {
   const [showPFI, setShowPFI] = useState([]);
   const [uri, setUri] = useState('');
   const [payPerUnit, setPayPerUnit] = useState([]);
+  const [outcurr, setOurcurr] = useState('');
 
 
   const handleSend = () => {
@@ -93,7 +94,7 @@ const Send = () => {
         setShowPFI(uniquePFIs);  // Set unique PFIs to show
         // Set the description for the first offering
         setDescription(selectedOffering[0].data.description);
-        console.log("96",currency, " , ", payoutCurr)
+        setOurcurr(payoutCurr)
   }
   
       else{
@@ -131,13 +132,13 @@ const Send = () => {
      if(matchedPFIs.length > 0){
           
       setDescription(newSetOfOfferings[0].data.description);
+      setOurcurr(payout[0]);
+      console.log(payout, payoutCurr);
       const uniquePFIs = matchedPFIs.filter((pfi, index, self) =>
         index === self.findIndex((t) => t.pfiName === pfi.pfiName)
       );
       setShowPFI(uniquePFIs);  // Set unique PFIs to show
-      console.log(uniquePFIs);
-      console.log("138",currency, " , ", payoutCurr)
-
+    
     }
       }
     }
@@ -208,7 +209,7 @@ const Send = () => {
             {showPFI.map((pfi, index) => (
               <li key={index} className="p-4 bg-gray-700 rounded-lg mb-2">
                 <div className="font-semibold">{pfi.pfiName}</div>
-                <div className="text-sm text-blue-400">{pfi.payPerUnit} {payoutCurr} for 1 {currency}</div>
+                <div className="text-sm text-blue-400">{pfi.payPerUnit} {outcurr} for 1 {currency}</div>
               </li>
             ))}
           </ul>
