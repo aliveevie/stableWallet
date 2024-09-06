@@ -61,38 +61,48 @@ const Send = () => {
 
 
   useEffect(() => {
+    // When both PayIn and Payout currencies are selected, find the correct description
     if (currency && payoutCurr && newSetOfOfferings.length > 0) {
-      const selectedOfferings = newSetOfOfferings.filter(
+      const selectedOffering = newSetOfOfferings.filter(
         (offering) => offering.data.payout.currencyCode === payoutCurr
       );
-  
-      if (selectedOfferings.length > 0) {
-        // Iterate over each offering, find the matching PFI, and store relevant info
-        const matchedPFIs = selectedOfferings.map((offering) => {
+      if (selectedOffering.length > 0) {
+      //  console.log(selectedOffering)
+      //  setDescription(selectedOffering.data.description);  // Set the description for the matching offering
+      // console.log('Description:', selectedOffering.data.description);  // Log the description
+     //   setPayPerUnit(selectedOffering.data.payoutUnitsPerPayinUnit)
+     //   setUri(selectedOffering.metadata.from)
+     const matchedPFIs = selectedOffering.map((offering) => {
           const matchedPFI = state.pfiAllowlist.find(
             (pfi) => pfi.pfiUri === offering.metadata.from
-          );
-          
-          if (matchedPFI) {
-            return {
-              pfiName: matchedPFI.pfiName,
-              payPerUnit: offering.data.payoutUnitsPerPayinUnit, // Set the pay per unit (exchange rate)
-            };
-          }
-          return null; // Handle the case where no matching PFI is found
-        }).filter(Boolean); // Remove null entries
-  
-        if (matchedPFIs.length > 0) {
-          setShowPFI(matchedPFIs);  // Set the matched PFIs and their exchange rates
-          setDescription(selectedOfferings[0].data.description);  // Set the description for the first offering
-          setPayPerUnit(selectedOfferings[0].data.payoutUnitsPerPayinUnit);  // Set PayPerUnit for display
+          )
+
+        if(matchedPFI){
+            console.log(matchedPFI)
         }
-      } else {
-        setDescription('No offering available for the selected currency pair.');  // Fallback description
+     })
+
+    
+
+      }
+      
+      else{
+        if(newSetOfOfferings[0].data.description){
+          setDescription(newSetOfOfferings[0].data.description)
+          setPayPerUnit(newSetOfOfferings[0].data.paypayoutUnitsPerPayinUnit)
+          setUri(newSetOfOfferings[0].metadata.from)
+          if(uri){
+            for(const pfi of state.pfiAllowlist){
+                if(pfi.pfiUri == uri){
+                setShowPFI(pfi)
+                console.log(showPFI)
+              }
+            }
+          }
+        } 
       }
     }
-  }, [currency, payoutCurr, newSetOfOfferings, state.pfiAllowlist]);
-  
+  }, [payoutCurr, newSetOfOfferings, uri, payPerUnit, state, showPFI]);  // Trigger this when payoutCurr or newSetOfOfferings change
 
 
   if (loading) {
