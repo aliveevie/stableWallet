@@ -96,7 +96,8 @@ const Send = () => {
             pfiName: matchedPFI.pfiName,  // PFI Name
             payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
             currency: currency,
-            payoutcurr: payoutCurr
+            payoutcurr: payoutCurr,
+            claims: offering.data.requiredClaims
 
           };
         }
@@ -139,7 +140,8 @@ const Send = () => {
               pfiName: matchedPFI.pfiName,  // PFI Name
               payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
               currency: currency,
-              payoutCurr: payout[0]
+              payoutCurr: payout[0],
+              claims: offering.data.requiredClaims
             };
           }
        }).filter(Boolean);

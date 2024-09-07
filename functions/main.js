@@ -105,7 +105,9 @@ const useStore = () => {
   const createExchange = async (offering, amount, payoutPaymentDetails) => {
     const selectedCredentials = PresentationExchange.selectCredentials({
       vcJwts: state.customerCredentials,
-      presentationDefinition: offering.data.requiredClaims,
+      presentationDefinition: offering,
+
+   //   presentationDefinition: offering.data.requiredClaims,
     });
 
     const rfq = Rfq.create({
