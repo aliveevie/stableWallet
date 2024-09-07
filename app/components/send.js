@@ -97,7 +97,7 @@ const Send = () => {
             payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
             currency: currency,
             payoutcurr: payoutCurr,
-            claims: offering.data.requiredClaims
+            offering: offering
 
           };
         }
@@ -141,7 +141,7 @@ const Send = () => {
               payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
               currency: currency,
               payoutCurr: payout[0],
-              claims: offering.data.requiredClaims
+              offering: offering
             };
           }
        }).filter(Boolean);

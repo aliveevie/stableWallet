@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import useStore from '../../functions/main';
 
 const Wallet = ({ currentData }) => {
-    const { formatAmount, createExchange } = useStore();
-    const [amountToSend, setAmountToSend] = useState(0);
-    const [amount, setAmount] = useState(0); // Simulated exchange rate to USD
-    const [recipientAmount, setRecipientAmount] = useState(0); // Amount recipient will receive
+    const { state, formatAmount, createExchange, pollExchanges } = useStore();
+    const [amountToSend, setAmountToSend] = useState('');
+    const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
+    const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
     const [recipientAddress, setRecipientAddress] = useState(''); // Recipient address
     const [isConfirming, setIsConfirming] = useState(false); // State to show confirmation section
-
-    console.log(currentData)
+    
+    
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
@@ -17,6 +17,8 @@ const Wallet = ({ currentData }) => {
         const convertedValue = formatAmount(value * currentData.payPerUnit);
         setAmount(convertedValue);
         setRecipientAmount(convertedValue); // Simulating same for recipient
+        pollExchanges();
+        console.log(state.transactions)
     };
 
     const handleSend = (e) => {
@@ -37,7 +39,7 @@ const Wallet = ({ currentData }) => {
         setRecipientAmount('');
         setAmount('');
         setIsConfirming(false);
-        createExchange(currentData.claims, amount, recipientAddress)
+        createExchange(currentData.offering, amount, { address: recipientAddress })
     };
 
     const handleCancel = () => {
