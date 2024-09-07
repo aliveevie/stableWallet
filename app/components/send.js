@@ -23,7 +23,7 @@ const Send = () => {
   const [activeIndex, setActiveIndex] = useState(false);
   const [activeData, setActiveData] = useState('');
 
-  console.log(activeData)
+  
 
   const handleSend = () => {
         setWalletAddress(true)
@@ -219,7 +219,7 @@ const Send = () => {
                                             <li
                                                 key={index}
                                                 className={`p-4 bg-gray-700 rounded-lg mb-2 cursor-pointer ${
-                                                    index === activeIndex
+                                                    activeIndex
                                                         ? 'bg-green-500'
                                                         : 'bg-gray-700 hover:bg-gray-600'
                                                 }`} // Conditional class for active or hover state
@@ -246,7 +246,7 @@ const Send = () => {
             </>
         ) : (
             // Show the Wallet component when the form is hidden
-            <Wallet exchangeRate={activeData.payPerUnit} /> // Passing exchange rate from the first PFI as an example
+            <Wallet currentData={activeData} /> // Passing exchange rate from the first PFI as an example
         )}
     </div>
 );

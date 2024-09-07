@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
+import useStore from '../../functions/main';
 
-const Wallet = ({ exchangeRate }) => {
+const Wallet = ({ currentData }) => {
+    const { formatAmount } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
-    const [amountInUSD, setAmountInUSD] = useState(0); // Simulated exchange rate to USD
+    const [amount, setAmount] = useState(0); // Simulated exchange rate to USD
     const [recipientAmount, setRecipientAmount] = useState(0); // Amount recipient will receive
     const [recipientAddress, setRecipientAddress] = useState(''); // Recipient address
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
         setAmountToSend(value);
-        const convertedValue = value * exchangeRate; // Assuming exchangeRate converts to USD
-        setAmountInUSD(convertedValue.toFixed(2));
-        setRecipientAmount(convertedValue.toFixed(2)); // Simulating same for recipient
+        const convertedValue = formatAmount(value * currentData.payPerUnit);
+        setAmount(convertedValue);
+        setRecipientAmount(convertedValue); // Simulating same for recipient
     };
+
+    console.log(currentData)
+
 
     return (
         <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
@@ -38,7 +43,7 @@ const Wallet = ({ exchangeRate }) => {
                     />
                     <div className="absolute inset-y-0 left-1/2 transform -translate-x-1/2 w-px bg-gray-600 h-full"></div>
                 </div>
-                <div className="text-gray-400 mt-2">≈ {amountInUSD} USD</div>
+                <div className="text-gray-400 mt-2">≈ {amount} {currentData.currency}</div>
             </div>
 
             {/* Recipient Amount Section */}
@@ -48,7 +53,7 @@ const Wallet = ({ exchangeRate }) => {
                     <span className="text-white">{recipientAmount}</span>
                     <div className="absolute inset-y-0 left-1/2 transform -translate-x-1/2 w-px bg-gray-600 h-full"></div>
                 </div>
-                <div className="text-gray-400 mt-2">≈ {recipientAmount} USD</div>
+                <div className="text-gray-400 mt-2">≈ {recipientAmount} {currentData.payoutcurr}</div>
             </div>
 
             {/* Recipient Address Section */}
