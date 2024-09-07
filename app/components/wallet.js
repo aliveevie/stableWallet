@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useStore from '../../functions/main';
 
 const Wallet = ({ currentData }) => {
@@ -18,7 +18,6 @@ const Wallet = ({ currentData }) => {
         setAmount(convertedValue);
         setRecipientAmount(convertedValue); // Simulating same for recipient
         pollExchanges();
-        console.log(state.transactions)
     };
 
     const handleSend = (e) => {
@@ -47,6 +46,10 @@ const Wallet = ({ currentData }) => {
         setIsConfirming(false);
     };
 
+    useEffect(() => {
+        console.log(state.transactions)
+
+    }, [state.transactions])
 
     
     return (
