@@ -19,11 +19,21 @@ const Send = () => {
   const [uri, setUri] = useState('');
   const [payPerUnit, setPayPerUnit] = useState([]);
   const [outcurr, setOurcurr] = useState('');
+  const [activeIndex, setActiveIndex] = useState(false);
+  const [activeData, setActiveData] = useState('');
 
+  console.log(activeData)
 
   const handleSend = () => {
 
   };
+
+
+    // Function to handle item click
+    const handleItemClick = (index) => {
+        setActiveIndex(true); // Set the active index
+        setActiveData(index)
+    };
 
   useEffect(() => {
     async function getOffering() {
@@ -133,7 +143,7 @@ const Send = () => {
           
       setDescription(newSetOfOfferings[0].data.description);
       setOurcurr(payout[0]);
-      console.log(payout, payoutCurr);
+   //   console.log(payout, payoutCurr);
       const uniquePFIs = matchedPFIs.filter((pfi, index, self) =>
         index === self.findIndex((t) => t.pfiName === pfi.pfiName)
       );
@@ -189,12 +199,7 @@ const Send = () => {
         </select>
       </div>
 
-      <button
-        onClick={handleSend}
-        className="w-full py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300"
-      >
-        Continue
-      </button>
+      
 
       {description && (
   <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
@@ -202,20 +207,34 @@ const Send = () => {
     <p>{description}</p>
 
     {showPFI.length > 0 && (
-      <>
-        <h4 className="text-md font-semibold mt-4">Exchange Rate Offerings:</h4>
-        <div className="mt-4">
-          <ul>
-            {showPFI.map((pfi, index) => (
-              <li key={index} className="p-4 bg-gray-700 rounded-lg mb-2">
-                <div className="font-semibold">{pfi.pfiName}</div>
-                <div className="text-sm text-blue-400">{pfi.payPerUnit} {outcurr} for 1 {currency}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </>
-    )}
+                <>
+                    <h4 className="text-md font-semibold mt-4">Exchange Rate Offerings:</h4>
+                    <div className="mt-4">
+                        <ul>
+                            {showPFI.map((pfi, index) => (
+                                <li 
+                                    key={index} 
+                                    className={`p-4 bg-gray-700 rounded-lg mb-2 cursor-pointer ${
+                                       activeIndex ? 'bg-green-500' : 'bg-gray-700 hover:bg-gray-600'
+                                    }`} // Conditional class for active or hover state
+                                    onClick={() => handleItemClick(pfi)} // Set item as active on click
+                                >
+                                    <div className="font-semibold">{pfi.pfiName}</div>
+                                    <div className="text-sm text-blue-400">
+                                        {pfi.payPerUnit} {outcurr} for 1 {currency}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </>
+            )}
+            <button
+              onClick={handleSend}
+              className="w-full py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300"
+      >
+        Continue
+      </button>
   </div>
 )}
     </div>
