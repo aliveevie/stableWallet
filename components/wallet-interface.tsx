@@ -11,6 +11,7 @@ import Dollar from '../public/icons/dollar.png';
 import Cedi from '../public/icons/cedi.png';
 import Kenyan from '../public/icons/shilling-shilling.png';
 import Euro from '../public/icons/euro.png';
+import  Link  from 'next/link';
 
 export function WalletInterface() {
   const [balance, setBalance] = useState(1234.56)
@@ -40,13 +41,19 @@ export function WalletInterface() {
         </div>
 
         <div className="flex justify-center space-x-4 mb-4">
+          <Link href='/send'>
           <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
-            <FaPaperPlane className="w-4 h-4 mb-1" />
-            <span className="text-xs">Send</span>
+            <FaPaperPlane className="w-20 h-20 mb-1" />
+                <span className="text-xs">Send</span>
+            
           </Button>
+          </Link>
+          
           <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
-            <FaDownload className="w-4 h-4 mb-1" />
-            <span className="text-xs">Receive</span>
+            <FaDownload className="w-20 h-20 mb-1" />
+            <Link href='/receive'>
+                <span className="text-">Receive</span>
+            </Link>
           </Button>
         </div>
 
