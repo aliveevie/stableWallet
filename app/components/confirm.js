@@ -4,17 +4,19 @@ import useStore from '../../functions/main';
 
 
 const ConfirmTransaction = ({ currentData }) => {
-  console.log(currentData)
   const [loading, setLoading] = useState(true);
   const [transactionSuccess, setTransactionSuccess] = useState(false);
-  const { addOrder } = useStore();
-  
+  const { addOrder, formatMessages, fetchExchanges } = useStore();
   
   useEffect(() => {
     // Simulate a network request or transaction confirmation delay
-    const payOrder = async () => {
-     //   const data = await addOrder(currentdata)
+    const fetchExchangeData = async () => {
+        const data = await fetchExchanges(currentData.offering.metadata.from)
+        if(data){
+            console.log(data)
+        }
     }
+    fetchExchangeData();
     const confirmTransaction = setTimeout(() => {
       setLoading(false);  // Stop the loader
     //  setTransactionSuccess(true); // Show success message

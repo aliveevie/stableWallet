@@ -45,10 +45,7 @@ const Wallet = ({ currentData }) => {
         setIsConfirming(false);
     };
 
-    useEffect(() => {
-        console.log(state.transactions)
-
-    }, [state.transactions])
+    
 
     
     return (

@@ -206,7 +206,7 @@ const useStore = () => {
           const exchanges = await fetchExchanges(pfi.pfiUri);
           allExchanges.push(...exchanges);
         }
-        console.log('All exchanges:', allExchanges);
+      //  console.log('All exchanges:', allExchanges);
         updateExchanges(allExchanges.reverse());
         setState((prevState) => ({
           ...prevState,
