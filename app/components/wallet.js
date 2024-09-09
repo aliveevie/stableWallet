@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useStore from '../../functions/main';
+import ConfirmTransaction from './confirm';
 
 const Wallet = ({ currentData }) => {
     const { state, formatAmount, createExchange, pollExchanges } = useStore();
@@ -8,8 +9,8 @@ const Wallet = ({ currentData }) => {
     const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
     const [recipientAddress, setRecipientAddress] = useState(''); // Recipient address
     const [isConfirming, setIsConfirming] = useState(false); // State to show confirmation section
-    
-    
+    const [showTransactions, setTransactions] = useState(false);
+
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
@@ -30,15 +31,13 @@ const Wallet = ({ currentData }) => {
     };
 
     const handleConfirm = () => {
-        // Handle the actual transaction logic here
-        alert("Transaction Confirmed!");
-        // Reset after confirmation
         setAmountToSend('');
         setRecipientAddress('');
         setRecipientAmount('');
         setAmount('');
         setIsConfirming(false);
-        createExchange(currentData.offering, amount, { address: recipientAddress })
+     //   createExchange(currentData.offering, amount, { address: recipientAddress })
+        setTransactions(true)
     };
 
     const handleCancel = () => {
@@ -116,7 +115,7 @@ const Wallet = ({ currentData }) => {
             </form>
 
             {/* Confirmation Section */}
-            {isConfirming && (
+            {isConfirming && !showTransactions && (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75">
         <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-center max-w-sm mx-auto">
             <h3 className="text-lg font-bold text-white mb-4">Confirm Transaction</h3>
@@ -147,6 +146,8 @@ const Wallet = ({ currentData }) => {
         </div>
     </div>
 )}
+
+      {!isConfirming && showTransactions && <ConfirmTransaction />}
 
 
         </div>
