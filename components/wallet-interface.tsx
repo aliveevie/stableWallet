@@ -5,22 +5,22 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FaBars, FaPaperPlane, FaDownload, FaSyncAlt, FaHistory, FaLifeRing, FaWallet, FaCog, FaLiraSign, FaPoundSign, FaDollarSign, FaEuroSign, } from 'react-icons/fa'
 import Image from 'next/image'
+import Footer from '@/app/components/footer'
 
 export function WalletInterface() {
   const [balance, setBalance] = useState(1234.56)
   const [assets, setAssets] = useState([
-    { name: 'Nigerian Naira', amount: 50000, value: 62.5, icon: '/placeholder.svg?height=40&width=40', symbol: <FaLiraSign /> },
+    { name: 'Nigerian Naira', amount: 50000, value: 62.5, icon: '/placeholder.svg?height=40&width=40', symbol: '₦' },
     { name: 'Ghanaian Cedi', amount: 1000, value: 83.33, icon: '/placeholder.svg?height=40&width=40', symbol: '₵' },
     { name: 'Kenyan Shilling', amount: 15000, value: 100, icon: '/placeholder.svg?height=40&width=40', symbol: 'KSh' },
-    { name: 'US Dollar', amount: 500, value: 500, icon: '/placeholder.svg?height=40&width=40', symbol: <FaDollarSign /> },
-    { name: 'Euro', amount: 200, value: 220, icon: '/placeholder.svg?height=40&width=40', symbol: <FaEuroSign /> },
-    { name: 'British Pound', amount: 150, value: 190, icon: '/placeholder.svg?height=40&width=40', symbol: <FaPoundSign /> },
+    { name: 'US Dollar', amount: 500, value: 500, icon: '/placeholder.svg?height=40&width=40', symbol: '$' },
+    { name: 'Euro', amount: 200, value: 220, icon: '/placeholder.svg?height=40&width=40', symbol: '€' },
   ])
 
   return (
     <div className="flex flex-col w-[360px] h-[640px] bg-gray-900 text-white overflow-hidden">
       <header className="flex justify-between items-center p-4 bg-gray-800">
-        <FaBars className="w-6 h-6" />
+        <FaBars className="w-6 h-6 hover" />
         <div className="flex items-center space-x-2">
           <span className="text-sm">SW</span>
           <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -34,11 +34,11 @@ export function WalletInterface() {
         </div>
 
         <div className="flex justify-center space-x-4 mb-4">
-          <Button variant="outline" size="sm" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
+          <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
             <FaPaperPlane className="w-4 h-4 mb-1" />
             <span className="text-xs">Send</span>
           </Button>
-          <Button variant="outline" size="sm" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
+          <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
             <FaDownload className="w-4 h-4 mb-1" />
             <span className="text-xs">Receive</span>
           </Button>
@@ -74,19 +74,7 @@ export function WalletInterface() {
       </main>
 
       <footer className="bg-gray-800">
-        <div className="flex justify-around p-2">
-          {[
-            { name: 'History', icon: FaHistory },
-            { name: 'Support', icon: FaLifeRing },
-            { name: 'Assets', icon: FaWallet },
-            { name: 'Settings', icon: FaCog }
-          ].map((item) => (
-            <Button key={item.name} variant="ghost" size="sm" className="flex flex-col items-center p-1">
-              <item.icon className="w-4 h-4 mb-1" />
-              <span className="text-[10px]">{item.name}</span>
-            </Button>
-          ))}
-        </div>
+            <Footer />
       </footer>
     </div>
   )
