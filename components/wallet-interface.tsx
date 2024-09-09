@@ -6,16 +6,22 @@ import { Card } from "@/components/ui/card"
 import { FaBars, FaPaperPlane, FaDownload, FaSyncAlt, FaHistory, FaLifeRing, FaWallet, FaCog, FaLiraSign, FaPoundSign, FaDollarSign, FaEuroSign, } from 'react-icons/fa'
 import Image from 'next/image'
 import Footer from '@/app/components/footer'
+import Naira from '../public/icons//naira-sign.png';
+import Dollar from '../public/icons/dollar.png';
+import Cedi from '../public/icons/cedi.png';
+import Kenyan from '../public/icons/shilling-shilling.png';
+import Euro from '../public/icons/euro.png';
 
 export function WalletInterface() {
   const [balance, setBalance] = useState(1234.56)
   const [assets, setAssets] = useState([
-    { name: 'Nigerian Naira', amount: 50000, value: 62.5, icon: '/placeholder.svg?height=40&width=40', symbol: '₦' },
-    { name: 'Ghanaian Cedi', amount: 1000, value: 83.33, icon: '/placeholder.svg?height=40&width=40', symbol: '₵' },
-    { name: 'Kenyan Shilling', amount: 15000, value: 100, icon: '/placeholder.svg?height=40&width=40', symbol: 'KSh' },
-    { name: 'US Dollar', amount: 500, value: 500, icon: '/placeholder.svg?height=40&width=40', symbol: '$' },
-    { name: 'Euro', amount: 200, value: 220, icon: '/placeholder.svg?height=40&width=40', symbol: '€' },
-  ])
+    { name: 'Nigerian Naira', amount: 0, value: 0.0, icon: Naira, symbol: 'Naira', sym: '₦' },
+    { name: 'Ghanaian Cedi', amount: 0, value: 0.0, icon: Cedi, symbol: 'Ghana Cedi', sym: '₵' },
+    { name: 'Kenyan Shilling', amount: 0, value: 0.0, icon: Kenyan, symbol: 'Kenyan Shilling', sym: 'KSh'},
+    { name: 'US Dollar', amount: 0, value: 0.0, icon: Dollar, symbol: 'Dollar', sym:'$' },
+    { name: 'Euro', amount: 0, value: 0, icon: Euro, symbol: 'Euro', sym: '£'},
+  ]);
+
 
   return (
     <div className="flex flex-col w-[360px] h-[640px] bg-gray-900 text-white overflow-hidden">
@@ -60,12 +66,12 @@ export function WalletInterface() {
                   <Image src={asset.icon} alt={asset.name} width={24} height={24} className="rounded-full" />
                   <div>
                     <p className="font-medium text-sm text-white">{asset.symbol}</p>
-                    <p className="text-xs text-gray-400">${asset.value.toFixed(2)}</p>
+                    <p className="text-xs text-gray-400">${asset.value}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="font-medium text-sm text-white">{asset.amount.toLocaleString()}</p>
-                  <p className="text-xs text-gray-400">{asset.symbol}{(asset.amount * (asset.value / asset.amount)).toFixed(2)}</p>
+                  <p className="text-xs text-gray-400">{asset.sym}{0}</p>
                 </div>
               </Card>
             ))}
