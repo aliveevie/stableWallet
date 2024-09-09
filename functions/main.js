@@ -103,6 +103,8 @@ const useStore = () => {
   }, [state.pfiAllowlist]);
 
   const createExchange = async (offering, amount, payoutPaymentDetails) => {
+    console.log(offering, amount, payoutPaymentDetails);
+
     const selectedCredentials = PresentationExchange.selectCredentials({
       vcJwts: state.customerCredentials,
       presentationDefinition: offering.data.requiredClaims,
@@ -131,7 +133,7 @@ const useStore = () => {
 
     try {
       rfq.verifyOfferingRequirements(offering);
-      console.log("Works!")
+     // console.log("Works!")
     } catch (e) {
       console.log('Offering requirements not met', e);
     }
@@ -139,13 +141,19 @@ const useStore = () => {
     await rfq.sign(state.customerDid);
 
     try {
-      await TbdexHttpClient.createExchange(rfq);
+      const data = await TbdexHttpClient.createExchange(rfq);
+      if(data){
+        console.log(data);
+        return data;
+
+      }
     } catch (error) {
       console.error('Failed to create exchange:', error);
     }
   };
 
   const fetchExchanges = async (pfiUri) => {
+    console.log(pfiUri)
     try {
       const exchanges = await TbdexHttpClient.getExchanges({
         pfiDid: pfiUri,
@@ -223,6 +231,7 @@ const useStore = () => {
     return () => clearInterval(intervalId); // Clean up interval on component unmount
   }, [state.pfiAllowlist, state.customerDid]);
 
+
   const initializeDid = useCallback(async () => {
     try {
       const storedDid = localStorage.getItem('customerDid');
@@ -271,7 +280,6 @@ const useStore = () => {
       return formattedMessages;
   }
   
-
   const loadCredentials = () => {
     const storedCredentials = localStorage.getItem('customerCredentials');
     if (storedCredentials) {

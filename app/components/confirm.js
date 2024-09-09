@@ -3,26 +3,25 @@ import Loader from './loader'; // Import the existing loader component
 import useStore from '../../functions/main';
 
 
-const ConfirmTransaction = ({ currentData }) => {
+const ConfirmTransaction = ({ currentData, amount, recipientAddress }) => {
   const [loading, setLoading] = useState(true);
   const [transactionSuccess, setTransactionSuccess] = useState(false);
-  const { addOrder, formatMessages, fetchExchanges } = useStore();
-  
+  const { state, addOrder, formatMessages, fetchExchanges, pollExchanges, createExchange } = useStore();
+  const [exchange, setExchange] = useState(null);
+
   useEffect(() => {
     // Simulate a network request or transaction confirmation delay
     const fetchExchangeData = async () => {
-        const data = await fetchExchanges(currentData.offering.metadata.from)
-        if(data){
-            console.log(data)
-        }
+     const result = await createExchange(currentData.offering, amount, { address: recipientAddress });
+     if(result){
+          console.log(result)
+     }
+    
+        
     }
+  //  pollExchanges();
     fetchExchangeData();
-    const confirmTransaction = setTimeout(() => {
-      setLoading(false);  // Stop the loader
-    //  setTransactionSuccess(true); // Show success message
-    }, 3000); // Adjust to your transaction time
-
-    return () => clearTimeout(confirmTransaction);
+   
   }, []);
 
   return (

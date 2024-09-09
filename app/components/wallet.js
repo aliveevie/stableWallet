@@ -3,7 +3,7 @@ import useStore from '../../functions/main';
 import ConfirmTransaction from './confirm';
 
 const Wallet = ({ currentData }) => {
-    const { state, formatAmount, createExchange, pollExchanges } = useStore();
+    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
     const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
@@ -18,7 +18,6 @@ const Wallet = ({ currentData }) => {
         const convertedValue = formatAmount(value * currentData.payPerUnit);
         setAmount(convertedValue);
         setRecipientAmount(convertedValue); // Simulating same for recipient
-        pollExchanges();
     };
 
     const handleSend = (e) => {
@@ -36,8 +35,13 @@ const Wallet = ({ currentData }) => {
         setRecipientAmount('');
         setAmount('');
         setIsConfirming(false);
-     //   createExchange(currentData.offering, amount, { address: recipientAddress })
-        setTransactions(true)
+        const dataFetch = async () => await createExchange(currentData.offering, amount, { address: recipientAddress }).then(async () => {
+                const data = await fetchExchanges(currentData.offering.metadata.from)
+                console.log(data)
+        })
+        setTransactions(true);
+        alert("Confirm Transactions!");
+        dataFetch();
     };
 
     const handleCancel = () => {
@@ -112,7 +116,7 @@ const Wallet = ({ currentData }) => {
             </form>
 
             {/* Confirmation Section */}
-            {isConfirming && !showTransactions && (
+            {isConfirming && (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-75">
         <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-center max-w-sm mx-auto">
             <h3 className="text-lg font-bold text-white mb-4">Confirm Transaction</h3>
@@ -143,10 +147,6 @@ const Wallet = ({ currentData }) => {
         </div>
     </div>
 )}
-
-      {!isConfirming && showTransactions && <ConfirmTransaction currentData={currentData} />}
-
-
         </div>
        
        </>
