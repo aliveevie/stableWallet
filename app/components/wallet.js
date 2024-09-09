@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import useStore from '../../functions/main';
 import ConfirmTransaction from './confirm';
 
 const Wallet = ({ currentData }) => {
-    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges } = useStore();
+    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
     const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
     const [recipientAddress, setRecipientAddress] = useState(''); // Recipient address
     const [isConfirming, setIsConfirming] = useState(false); // State to show confirmation section
     const [showTransactions, setTransactions] = useState(false);
+    const [exchange, setExchange] = useState(null);
+    const [currentExc, setCurrentExc] = useState(null);
 
 
     const handleAmountChange = (e) => {
@@ -37,7 +39,9 @@ const Wallet = ({ currentData }) => {
         setIsConfirming(false);
         const dataFetch = async () => await createExchange(currentData.offering, amount, { address: recipientAddress }).then(async () => {
                 const data = await fetchExchanges(currentData.offering.metadata.from)
-                console.log(data)
+                if(data){
+                    setExchange(data);
+                }
         })
         setTransactions(true);
         alert("Confirm Transactions!");
@@ -49,6 +53,18 @@ const Wallet = ({ currentData }) => {
         setIsConfirming(false);
     };
 
+    useEffect(() => {
+        if(exchange){
+            setCurrentExc(exchange[exchange.length - 1])
+        }
+
+        const sendCurrency = async () => {
+            if(currentExc){
+                const result = await addOrder(currentExc.id, currentExc.pfiDid).then(() => console.log("Payment Success!"))
+            } 
+        }
+        sendCurrency();
+    }, [exchange, currentExc])
     
 
     
