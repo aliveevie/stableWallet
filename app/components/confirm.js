@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Loader from './loader'; // Import the existing loader component
+import useStore from '../../functions/main';
 
-const ConfirmTransaction = () => {
+
+const ConfirmTransaction = ({ currentData }) => {
+  console.log(currentData)
   const [loading, setLoading] = useState(true);
   const [transactionSuccess, setTransactionSuccess] = useState(false);
-
+  const { addOrder } = useStore();
+  
+  
   useEffect(() => {
     // Simulate a network request or transaction confirmation delay
+    const payOrder = async () => {
+     //   const data = await addOrder(currentdata)
+    }
     const confirmTransaction = setTimeout(() => {
       setLoading(false);  // Stop the loader
-      setTransactionSuccess(true); // Show success message
+    //  setTransactionSuccess(true); // Show success message
     }, 3000); // Adjust to your transaction time
 
     return () => clearTimeout(confirmTransaction);

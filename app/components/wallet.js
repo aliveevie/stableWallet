@@ -147,7 +147,7 @@ const Wallet = ({ currentData }) => {
     </div>
 )}
 
-      {!isConfirming && showTransactions && <ConfirmTransaction />}
+      {!isConfirming && showTransactions && <ConfirmTransaction currentData={currentData} />}
 
 
         </div>
