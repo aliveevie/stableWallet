@@ -141,17 +141,14 @@ const useStore = () => {
     await rfq.sign(state.customerDid);
 
     try {
-      const data = await TbdexHttpClient.createExchange(rfq);
-      if(data){
-        console.log(data);
-        return data;
-
-      }
+        await TbdexHttpClient.createExchange(rfq);
+      
     } catch (error) {
       console.error('Failed to create exchange:', error);
     }
   };
 
+  
   const fetchExchanges = async (pfiUri) => {
     console.log(pfiUri)
     try {

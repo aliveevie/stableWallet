@@ -12,15 +12,10 @@ const ConfirmTransaction = ({ currentData, amount, recipientAddress }) => {
   useEffect(() => {
     // Simulate a network request or transaction confirmation delay
     const fetchExchangeData = async () => {
-     const result = await createExchange(currentData.offering, amount, { address: recipientAddress });
-     if(result){
-          console.log(result)
-     }
+  //   const result = await createExchange(currentData.offering, amount, { address: recipientAddress });
     
-        
     }
   //  pollExchanges();
-    fetchExchangeData();
    
   }, []);
 
