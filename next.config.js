@@ -1,25 +1,12 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  // ... other config options
   webpack: (config, { isServer }) => {
+    // ... existing webpack config
+
     if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        url: require.resolve('url/'),
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        assert: require.resolve('assert/'),
-        os: require.resolve('os-browserify/browser'),
-        path: require.resolve('path-browserify'),
-      };
+      config.externals = [...(config.externals || []), 'secp256k1', 'ethers'];
     }
+
     return config;
   },
 };
-
-module.exports = nextConfig;
