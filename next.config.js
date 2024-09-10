@@ -1,12 +1,31 @@
+const webpack = require('webpack');
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ... other config options
+  reactStrictMode: true,
+
   webpack: (config, { isServer }) => {
-    // ... existing webpack config
-
     if (!isServer) {
-      config.externals = [...(config.externals || []), 'secp256k1', 'ethers'];
-    }
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        stream: require.resolve('stream-browserify'),
+        crypto: require.resolve('crypto-browserify'),
+      };
 
+      config.plugins.push(
+        new webpack.ProvidePlugin({
+          process: 'process/browser',
+        }),
+        new webpack.NormalModuleReplacementPlugin(
+          /node:crypto/,
+          (resource) => {
+            resource.request = resource.request.replace(/^node:/, '');
+          }
+        )
+      );
+    }
     return config;
   },
 };
+
+module.exports = nextConfig;

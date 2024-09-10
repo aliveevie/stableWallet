@@ -1,7 +1,7 @@
 import { Receive } from "@/components/receive"
 
 
-export default function() {
+export default function Page() {
         return <>
         <Receive />
         </>     

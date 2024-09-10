@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { Close, Order, Rfq, TbdexHttpClient } from '@tbdex/http-client';
-import { DidDht } from '@web5/dids';
-import { Jwt, PresentationExchange } from '@web5/credentials';
 
 const mockProviderDids = {
   aquafinance_capital: {
@@ -17,7 +14,7 @@ Offerings:
 - GHS to USDC
 - NGN to KES
 - KES to USD
-- USD to KES`
+- USD to KES`,
   },
   flowback_financial: {
     uri: 'did:dht:zkp5gbsqgzn69b3y5dtt5nnpjtdq6sxyukpzo68npsf79bmtb9zy',
@@ -30,7 +27,7 @@ Offerings:
 - USD to EUR
 - EUR to USD
 - USD to GBP
-- USD to BTC`
+- USD to BTC`,
   },
   vertex_liquid_assets: {
     uri: 'did:dht:enwguxo8uzqexq14xupe4o9ymxw3nzeb9uug5ijkj9rhfbf1oy5y',
@@ -43,7 +40,7 @@ Offerings:
 - EUR to USD
 - EUR to USDC
 - USD to EUR
-- EUR to GBP`
+- EUR to GBP`,
   },
   titanium_trust: {
     uri: 'did:dht:ozn5c51ruo7z63u1h748ug7rw5p1mq3853ytrd5gatu9a8mm8f1o',
@@ -56,14 +53,13 @@ Offerings:
 - USD to AUD
 - USD to GBP
 - USD to KES
-- USD to MXN`
-  }
+- USD to MXN`,
+  },
 };
-
 
 const useStore = () => {
   const [state, setState] = useState({
-    balance: parseFloat(localStorage.getItem('walletBalance')) || 100,
+    balance: 100, // default balance
     transactions: [],
     transactionsLoading: true,
     pfiAllowlist: Object.keys(mockProviderDids).map((key) => ({
@@ -80,15 +76,51 @@ const useStore = () => {
     customerCredentials: [],
   });
 
+  useEffect(() => {
+    const loadModules = async () => {
+      const {
+        Close,
+        Order,
+        Rfq,
+        TbdexHttpClient,
+      } = await import('@tbdex/http-client');
+      const { DidDht } = await import('@web5/dids');
+      const { Jwt, PresentationExchange } = await import('@web5/credentials');
+
+      // Assign to window object to make available throughout
+      window.Close = Close;
+      window.Order = Order;
+      window.Rfq = Rfq;
+      window.TbdexHttpClient = TbdexHttpClient;
+      window.DidDht = DidDht;
+      window.Jwt = Jwt;
+      window.PresentationExchange = PresentationExchange;
+    };
+
+    function setBalance(){
+       // Check if the code is running in the browser and access localStorage
+    if (typeof window !== 'undefined') {
+      const savedBalance = localStorage.getItem('walletBalance');
+      if (savedBalance) {
+        setState((prevState) => ({
+          ...prevState,
+          balance: parseFloat(savedBalance) || 100,
+        }));
+      }
+    }
+    }
+    setBalance();
+    loadModules();
+  }, []);
+
   const fetchOfferings = useCallback(async () => {
     try {
       const allOfferings = [];
       for (const pfi of state.pfiAllowlist) {
         const pfiUri = pfi.pfiUri;
-        const offerings = await TbdexHttpClient.getOfferings({
+        const offerings = await window.TbdexHttpClient.getOfferings({
           pfiDid: pfiUri,
         });
-      //  console.log(offerings)
         allOfferings.push(...offerings);
       }
 
@@ -103,14 +135,12 @@ const useStore = () => {
   }, [state.pfiAllowlist]);
 
   const createExchange = async (offering, amount, payoutPaymentDetails) => {
-    console.log(offering, amount, payoutPaymentDetails);
-
-    const selectedCredentials = PresentationExchange.selectCredentials({
+    const selectedCredentials = window.PresentationExchange.selectCredentials({
       vcJwts: state.customerCredentials,
       presentationDefinition: offering.data.requiredClaims,
     });
 
-    const rfq = Rfq.create({
+    const rfq = window.Rfq.create({
       metadata: {
         from: state.customerDid.uri,
         to: offering.metadata.from,
@@ -133,7 +163,6 @@ const useStore = () => {
 
     try {
       rfq.verifyOfferingRequirements(offering);
-     // console.log("Works!")
     } catch (e) {
       console.log('Offering requirements not met', e);
     }
@@ -141,18 +170,15 @@ const useStore = () => {
     await rfq.sign(state.customerDid);
 
     try {
-        await TbdexHttpClient.createExchange(rfq);
-      
+      await window.TbdexHttpClient.createExchange(rfq);
     } catch (error) {
       console.error('Failed to create exchange:', error);
     }
   };
 
-  
   const fetchExchanges = async (pfiUri) => {
-    console.log(pfiUri)
     try {
-      const exchanges = await TbdexHttpClient.getExchanges({
+      const exchanges = await window.TbdexHttpClient.getExchanges({
         pfiDid: pfiUri,
         did: state.customerDid,
       });
@@ -165,7 +191,7 @@ const useStore = () => {
   };
 
   const addClose = async (exchangeId, pfiUri, reason) => {
-    const close = Close.create({
+    const close = window.Close.create({
       metadata: {
         from: state.customerDid.uri,
         to: pfiUri,
@@ -178,14 +204,14 @@ const useStore = () => {
 
     await close.sign(state.customerDid);
     try {
-      await TbdexHttpClient.submitClose(close);
+      await window.TbdexHttpClient.submitClose(close);
     } catch (error) {
       console.error('Failed to close exchange:', error);
     }
   };
 
   const addOrder = async (exchangeId, pfiUri) => {
-    const order = Order.create({
+    const order = window.Order.create({
       metadata: {
         from: state.customerDid.uri,
         to: pfiUri,
@@ -195,7 +221,7 @@ const useStore = () => {
 
     await order.sign(state.customerDid);
     try {
-      return await TbdexHttpClient.submitOrder(order);
+      return await window.TbdexHttpClient.submitOrder(order);
     } catch (error) {
       console.error('Failed to submit order:', error);
     }
@@ -211,7 +237,6 @@ const useStore = () => {
           const exchanges = await fetchExchanges(pfi.pfiUri);
           allExchanges.push(...exchanges);
         }
-      //  console.log('All exchanges:', allExchanges);
         updateExchanges(allExchanges.reverse());
         setState((prevState) => ({
           ...prevState,
@@ -228,15 +253,18 @@ const useStore = () => {
     return () => clearInterval(intervalId); // Clean up interval on component unmount
   }, [state.pfiAllowlist, state.customerDid]);
 
-
   const initializeDid = useCallback(async () => {
     try {
       const storedDid = localStorage.getItem('customerDid');
       let customerDid;
       if (storedDid) {
-        customerDid = await DidDht.import({ portableDid: JSON.parse(storedDid) });
+        customerDid = await window.DidDht.import({
+          portableDid: JSON.parse(storedDid),
+        });
       } else {
-        customerDid = await DidDht.create({ options: { publish: true } });
+        customerDid = await window.DidDht.create({
+          options: { publish: true },
+        });
         const exportedDid = await customerDid.export();
         localStorage.setItem('customerDid', JSON.stringify(exportedDid));
       }
@@ -249,108 +277,39 @@ const useStore = () => {
     }
   }, []);
 
-  const formatMessages = (exchanges) => {    
-    const formattedMessages = exchanges.map(exchange => {
-        const latestMessage = exchange[exchange.length - 1]
-        const rfqMessage = exchange.find(message => message.kind === 'rfq')
-        const quoteMessage = exchange.find(message => message.kind === 'quote')
-        // console.log('quote', quoteMessage)
-        const status = generateExchangeStatusValues(latestMessage)
-        const fee = quoteMessage?.data['payin']?.['fee']
-        const payinAmount = quoteMessage?.data['payin']?.['amount']
-        const payoutPaymentDetails = rfqMessage.privateData?.payout.paymentDetails
-        return {
-          id: latestMessage.metadata.exchangeId,
-          payinAmount: (fee ? Number(payinAmount) + Number(fee) : Number(payinAmount)).toString() || rfqMessage.data['payinAmount'],
-          payinCurrency: quoteMessage.data['payin']?.['currencyCode'] ?? null,
-          payoutAmount: quoteMessage?.data['payout']?.['amount'] ?? null,
-          payoutCurrency: quoteMessage.data['payout']?.['currencyCode'],
-          status,
-          createdTime: rfqMessage.createdAt,
-          ...latestMessage.kind === 'quote' && {expirationTime: quoteMessage.data['expiresAt'] ?? null},
-          from: 'You',
-          to: payoutPaymentDetails?.address || payoutPaymentDetails?.accountNumber + ', ' + payoutPaymentDetails?.bankName || payoutPaymentDetails?.phoneNumber + ', ' + payoutPaymentDetails?.networkProvider || 'Unknown',
-          pfiDid: rfqMessage.metadata.to
-        }
-      })
+  const formatMessages = (exchanges) => {
+    const formattedMessages = exchanges.map((exchange) => {
+      const latestMessage = exchange[exchange.length - 1];
+      const rfqMessage = exchange.find((message) => message.kind === 'rfq');
+      const quoteMessage = exchange.find((message) => message.kind === 'quote');
+      const status = generateExchangeStatusValues(latestMessage);
+      const fee = quoteMessage?.data['payin']?.['fee'];
+      const payinAmount = quoteMessage?.data['payin']?.['amount'];
+      const payoutPaymentDetails = rfqMessage.privateData?.payout.paymentDetails;
+      return {
+        id: latestMessage.metadata.exchangeId,
+        payinAmount:
+          (fee ? Number(payinAmount) + Number(fee) : Number(payinAmount)).toString() ||
+          rfqMessage.data['payinAmount'],
+        payinCurrency: quoteMessage.data['payin']?.['currencyCode'] ?? null,
+        payoutAmount: quoteMessage?.data['payout']?.['amount'] ?? null,
+        payoutCurrency: quoteMessage.data['payout']?.['currencyCode'],
+        status,
+        createdTime: rfqMessage.createdAt,
+        ...(latestMessage.kind === 'quote' && {
+          expirationTime: quoteMessage.data['expiresAt'] ?? null,
+        }),
+        from: 'You',
+        to:
+          payoutPaymentDetails?.address ||
+          payoutPaymentDetails?.accountNumber + ', ' + payoutPaymentDetails?.bankName ||
+          payoutPaymentDetails?.phoneNumber + ', ' + payoutPaymentDetails?.networkProvider ||
+          'Unknown',
+        pfiDid: rfqMessage.metadata.to,
+      };
+    });
 
-      return formattedMessages;
-  }
-  
-  const loadCredentials = () => {
-    const storedCredentials = localStorage.getItem('customerCredentials');
-    if (storedCredentials) {
-      setState((prevState) => ({
-        ...prevState,
-        customerCredentials: JSON.parse(storedCredentials),
-      }));
-    } else {
-      console.log('No credentials exist');
-    }
-  };
-
-
-  const addCredential = (credential) => {
-    const updatedCredentials = [...state.customerCredentials, credential];
-    setState((prevState) => ({
-      ...prevState,
-      customerCredentials: updatedCredentials,
-    }));
-    localStorage.setItem('customerCredentials', JSON.stringify(updatedCredentials));
-    
-  };
-
-  const renderCredential = (credentialJwt) => {
-    const vc = Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
-    return {
-      title: vc.type[vc.type.length - 1].replace(/(?<!^)(?<![A-Z])[A-Z](?=[a-z])/g, ' $&'),
-      name: vc.credentialSubject['name'],
-      countryCode: vc.credentialSubject['countryOfResidence'],
-      issuanceDate: new Date(vc.issuanceDate).toLocaleDateString(undefined, { dateStyle: 'medium' }),
-    };
-  };
-
-  useEffect(() => {
-    localStorage.setItem('walletBalance', state.balance.toString());
-  }, [state.balance]);
-
-  const generateExchangeStatusValues = (exchangeMessage) => {
-    if (exchangeMessage instanceof Close) {
-      const reason = exchangeMessage.data.reason.toLowerCase();
-      if (reason.includes('complete') || reason.includes('success')) {
-        return 'completed';
-      } else if (reason.includes('expired')) {
-        return reason;
-      } else if (reason.includes('cancelled')) {
-        return 'cancelled';
-      } else {
-        return 'failed';
-      }
-    }
-    return exchangeMessage.kind;
-  };
-
-  const renderOrderStatus = (exchange) => {
-    const status = generateExchangeStatusValues(exchange);
-    switch (status) {
-      case 'rfq':
-        return 'Requested';
-      case 'quote':
-        return 'Quoted';
-      case 'order':
-      case 'orderstatus':
-        return 'Pending';
-      case 'completed':
-        return 'Completed';
-      case 'expired':
-        return 'Expired';
-      case 'cancelled':
-        return 'Cancelled';
-      case 'failed':
-        return 'Failed';
-      default:
-        return status;
-    }
+    return formattedMessages;
   };
 
   const selectTransaction = (transaction) => {
@@ -423,13 +382,69 @@ const useStore = () => {
     }
 
     try {
-      PresentationExchange.satisfiesPresentationDefinition({
+      window.PresentationExchange.satisfiesPresentationDefinition({
         vcJwts: credentials,
         presentationDefinition: offering.data.requiredClaims,
       });
       return true;
     } catch (e) {
       return false;
+    }
+  };
+
+  const addCredential = (credential) => {
+    const updatedCredentials = [...state.customerCredentials, credential];
+    setState((prevState) => ({
+      ...prevState,
+      customerCredentials: updatedCredentials,
+    }));
+    localStorage.setItem('customerCredentials', JSON.stringify(updatedCredentials));
+  };
+
+  const renderCredential = (credentialJwt) => {
+    const vc = window.Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
+    return {
+      title: vc.type[vc.type.length - 1].replace(/(?<!^)(?<![A-Z])[A-Z](?=[a-z])/g, ' $&'),
+      name: vc.credentialSubject['name'],
+      countryCode: vc.credentialSubject['countryOfResidence'],
+      issuanceDate: new Date(vc.issuanceDate).toLocaleDateString(undefined, {
+        dateStyle: 'medium',
+      }),
+    };
+  };
+
+  const loadCredentials = () => {
+    const storedCredentials = localStorage.getItem('customerCredentials');
+    if (storedCredentials) {
+      setState((prevState) => ({
+        ...prevState,
+        customerCredentials: JSON.parse(storedCredentials),
+      }));
+    } else {
+      console.log('No credentials exist');
+    }
+  };
+
+  const renderOrderStatus = (exchange) => {
+    const status = generateExchangeStatusValues(exchange);
+    switch (status) {
+      case 'rfq':
+        return 'Requested';
+      case 'quote':
+        return 'Quoted';
+      case 'order':
+      case 'orderstatus':
+        return 'Pending';
+      case 'completed':
+        return 'Completed';
+      case 'expired':
+        return 'Expired';
+      case 'cancelled':
+        return 'Cancelled';
+      case 'failed':
+        return 'Failed';
+      default:
+        return status;
     }
   };
 
@@ -460,8 +475,6 @@ const useStore = () => {
       loadCredentials();
       console.log('Fetching offerings...');
       await fetchOfferings();
-   // console.log("Clearing Local Storage!");
-   // localStorage.clear();
     };
     init();
   }, [fetchOfferings, initializeDid]);
@@ -485,7 +498,7 @@ const useStore = () => {
     addClose,
     getOfferingById,
     pollExchanges,
-    initializeDid
+    initializeDid,
   };
 };
 

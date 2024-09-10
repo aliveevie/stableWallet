@@ -1,7 +1,7 @@
 import { WalletInterface } from "@/components/wallet-interface"
 
 
-export default function() {
+export default function Page(){
         return <>
              <WalletInterface />
         </>
