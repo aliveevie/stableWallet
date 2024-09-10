@@ -77,48 +77,27 @@ const useStore = () => {
   });
 
   useEffect(() => {
-    const loadModules = async () => {
-      const {
-        Close,
-        Order,
-        Rfq,
-        TbdexHttpClient,
-      } = await import('@tbdex/http-client');
-      const { DidDht } = await import('@web5/dids');
-      const { Jwt, PresentationExchange } = await import('@web5/credentials');
-
-      // Assign to window object to make available throughout
-      window.Close = Close;
-      window.Order = Order;
-      window.Rfq = Rfq;
-      window.TbdexHttpClient = TbdexHttpClient;
-      window.DidDht = DidDht;
-      window.Jwt = Jwt;
-      window.PresentationExchange = PresentationExchange;
-    };
-
-    function setBalance(){
-       // Check if the code is running in the browser and access localStorage
-    if (typeof window !== 'undefined') {
-      const savedBalance = localStorage.getItem('walletBalance');
-      if (savedBalance) {
-        setState((prevState) => ({
-          ...prevState,
-          balance: parseFloat(savedBalance) || 100,
-        }));
+    function setBalance() {
+      if (typeof window !== 'undefined') {
+        const savedBalance = localStorage.getItem('walletBalance');
+        if (savedBalance) {
+          setState((prevState) => ({
+            ...prevState,
+            balance: parseFloat(savedBalance) || 100,
+          }));
+        }
       }
     }
-    }
     setBalance();
-    loadModules();
   }, []);
 
   const fetchOfferings = useCallback(async () => {
     try {
+      const { TbdexHttpClient } = await import('@tbdex/http-client');
       const allOfferings = [];
       for (const pfi of state.pfiAllowlist) {
         const pfiUri = pfi.pfiUri;
-        const offerings = await window.TbdexHttpClient.getOfferings({
+        const offerings = await TbdexHttpClient.getOfferings({
           pfiDid: pfiUri,
         });
         allOfferings.push(...offerings);
@@ -135,12 +114,16 @@ const useStore = () => {
   }, [state.pfiAllowlist]);
 
   const createExchange = async (offering, amount, payoutPaymentDetails) => {
-    const selectedCredentials = window.PresentationExchange.selectCredentials({
+    console.log(offering, amount, payoutPaymentDetails)
+    const { Rfq, TbdexHttpClient } = await import('@tbdex/http-client');
+    const { PresentationExchange } = await import('@web5/credentials')
+
+    const selectedCredentials = PresentationExchange.selectCredentials({
       vcJwts: state.customerCredentials,
       presentationDefinition: offering.data.requiredClaims,
     });
 
-    const rfq = window.Rfq.create({
+    const rfq = Rfq.create({
       metadata: {
         from: state.customerDid.uri,
         to: offering.metadata.from,
@@ -170,7 +153,7 @@ const useStore = () => {
     await rfq.sign(state.customerDid);
 
     try {
-      await window.TbdexHttpClient.createExchange(rfq);
+      await TbdexHttpClient.createExchange(rfq);
     } catch (error) {
       console.error('Failed to create exchange:', error);
     }
@@ -178,7 +161,8 @@ const useStore = () => {
 
   const fetchExchanges = async (pfiUri) => {
     try {
-      const exchanges = await window.TbdexHttpClient.getExchanges({
+      const { TbdexHttpClient } = await import('@tbdex/http-client');
+      const exchanges = await TbdexHttpClient.getExchanges({
         pfiDid: pfiUri,
         did: state.customerDid,
       });
@@ -191,7 +175,9 @@ const useStore = () => {
   };
 
   const addClose = async (exchangeId, pfiUri, reason) => {
-    const close = window.Close.create({
+    const { Close, TbdexHttpClient } = await import('@tbdex/http-client');
+
+    const close = Close.create({
       metadata: {
         from: state.customerDid.uri,
         to: pfiUri,
@@ -204,14 +190,16 @@ const useStore = () => {
 
     await close.sign(state.customerDid);
     try {
-      await window.TbdexHttpClient.submitClose(close);
+      await TbdexHttpClient.submitClose(close);
     } catch (error) {
       console.error('Failed to close exchange:', error);
     }
   };
 
   const addOrder = async (exchangeId, pfiUri) => {
-    const order = window.Order.create({
+    const { Order, TbdexHttpClient } = await import('@tbdex/http-client');
+
+    const order = Order.create({
       metadata: {
         from: state.customerDid.uri,
         to: pfiUri,
@@ -221,7 +209,7 @@ const useStore = () => {
 
     await order.sign(state.customerDid);
     try {
-      return await window.TbdexHttpClient.submitOrder(order);
+      return await TbdexHttpClient.submitOrder(order);
     } catch (error) {
       console.error('Failed to submit order:', error);
     }
@@ -229,7 +217,6 @@ const useStore = () => {
 
   const pollExchanges = useCallback(() => {
     const fetchAllExchanges = async () => {
-      console.log('Polling exchanges again...');
       if (!state.customerDid) return;
       const allExchanges = [];
       try {
@@ -254,15 +241,17 @@ const useStore = () => {
   }, [state.pfiAllowlist, state.customerDid]);
 
   const initializeDid = useCallback(async () => {
+    const { DidDht } = await import('@web5/dids');
+
     try {
       const storedDid = localStorage.getItem('customerDid');
       let customerDid;
       if (storedDid) {
-        customerDid = await window.DidDht.import({
+        customerDid = await DidDht.import({
           portableDid: JSON.parse(storedDid),
         });
       } else {
-        customerDid = await window.DidDht.create({
+        customerDid = await DidDht.create({
           options: { publish: true },
         });
         const exportedDid = await customerDid.export();
@@ -348,7 +337,6 @@ const useStore = () => {
 
   const getOfferingById = (offeringId) => {
     const selectedOffering = state.offerings.find((offering) => offering.id === offeringId);
-    console.log('Selected offering:', selectedOffering);
     return selectedOffering;
   };
 
@@ -376,13 +364,14 @@ const useStore = () => {
     );
   };
 
-  const satisfiesOfferingRequirements = (offering, credentials) => {
+  const satisfiesOfferingRequirements = async (offering, credentials) => {
+    const { PresentationExchange } = await import('@web5/credentials');
     if (credentials.length === 0 || !offering.data.requiredClaims) {
       return false;
     }
 
     try {
-      window.PresentationExchange.satisfiesPresentationDefinition({
+      PresentationExchange.satisfiesPresentationDefinition({
         vcJwts: credentials,
         presentationDefinition: offering.data.requiredClaims,
       });
@@ -401,8 +390,9 @@ const useStore = () => {
     localStorage.setItem('customerCredentials', JSON.stringify(updatedCredentials));
   };
 
-  const renderCredential = (credentialJwt) => {
-    const vc = window.Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
+  const renderCredential = async (credentialJwt) => {
+    const { Jwt } = await import('@web5/credentials');
+    const vc = Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
     return {
       title: vc.type[vc.type.length - 1].replace(/(?<!^)(?<![A-Z])[A-Z](?=[a-z])/g, ' $&'),
       name: vc.credentialSubject['name'],
@@ -424,6 +414,24 @@ const useStore = () => {
       console.log('No credentials exist');
     }
   };
+
+  const generateExchangeStatusValues = async (exchangeMessage) => {
+
+    const { Close } = await import("@tbdex/http-client")
+
+    if (exchangeMessage instanceof Close) {
+      if (exchangeMessage.data.reason.toLowerCase().includes('complete') || exchangeMessage.data.reason.toLowerCase().includes('success') ) {
+        return 'completed'
+      } else if (exchangeMessage.data.reason.toLowerCase().includes('expired')) {
+        return exchangeMessage.data.reason.toLowerCase()
+      } else if (exchangeMessage.data.reason.toLowerCase().includes('cancelled')) {
+        return 'cancelled'
+      } else {
+        return 'failed'
+      }
+    }
+    return exchangeMessage.kind
+  }
 
   const renderOrderStatus = (exchange) => {
     const status = generateExchangeStatusValues(exchange);
@@ -469,11 +477,8 @@ const useStore = () => {
 
   useEffect(() => {
     const init = async () => {
-      console.log('Initializing DID...');
       await initializeDid();
-      console.log('Loading credentials...');
       loadCredentials();
-      console.log('Fetching offerings...');
       await fetchOfferings();
     };
     init();

@@ -6,6 +6,7 @@ import styles from '../styles/Wallet.module.css';
 
 
 const Wallet = ({ currentData }) => {
+    console.log(currentData)
     const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
