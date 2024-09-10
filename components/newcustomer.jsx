@@ -1,10 +1,11 @@
 "use client";
+
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import useStore from '../../functions/main';
-import StoreCredentials from './storeCred';
+import useStore from '../functions/main';
+import StoreCredentials from '../app/components/storeCred';
 
-const NewCustomer = () => {
+export function Newcustomer() {
   const { state, addCredential } = useStore();
   const [uri, setUri] = useState(null);
   const [showCred, setShowCred] = useState(false); // Used to toggle the view
@@ -109,4 +110,3 @@ const NewCustomer = () => {
   );
 };
 
-export default NewCustomer;
