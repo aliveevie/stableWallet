@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import useStore from '../../functions/main';  // Import your store functions
-import Loader from './loader';  // Import the loader component
-import Wallet from './wallet';
+import useStore from '../functions/main';  // Import your store functions
+import Loader from '../app/components/loader';  // Import the loader component
+import Wallet from '../app/components/wallet';
 
-const Send = () => {
+export function Send() {
   const { state } = useStore();
   const [walletAddress, setWalletAddress] = useState(false);
   const [currency, setCurrency] = useState('');  // PayIn currency
@@ -253,5 +253,3 @@ const Send = () => {
     </div>
 );
 };
-
-export default Send;

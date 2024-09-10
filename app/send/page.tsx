@@ -1,4 +1,4 @@
-import Send from "../components/send"
+import { Send } from "@/components/send";
 
 export default function() {
         return <>
