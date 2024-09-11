@@ -477,9 +477,9 @@ const useStore = () => {
 
   useEffect(() => {
     const init = async () => {
-      await initializeDid();
-      loadCredentials();
-      await fetchOfferings();
+    await initializeDid();
+    loadCredentials();
+    await fetchOfferings();
    // localStorage.clear();
     };
     init();

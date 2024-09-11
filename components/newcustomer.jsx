@@ -15,34 +15,54 @@ export function Newcustomer() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-
-    if(state.customerDid && state.customerCredentials.length > 0){
-          setShowCred(true);
-          setSaveCredit(state.customerCredentials[0])
+    if (state.customerDid && state.customerCredentials.length > 0) {
+     // setShowCred(true);
+    //  setSaveCredit(state.customerCredentials[0]);
     }
-
-  },[state.customerDid, state.customerCredentials])
+  }, [state.customerDid, state.customerCredentials]);
 
   const createCredential = async (e) => {
     e.preventDefault();
-    
+
     // Fetching customer DID
-    const customerDid = await state.customerDid;
+    const customerDid = state.customerDid;
     if (customerDid) {
       setUri(customerDid.uri);
     }
-    
+
     // Fetching the credential
     const response = await fetch(
       `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid.uri}`
     );
 
     const credential = await response.text();
-    
+
     if (credential) {
-      await addCredential(credential); // Storing the credential
+      addCredential(credential); // Storing the credential
       setSaveCredit(credential);
-      setShowCred(true); // Switch to show the credential
+   //   setShowCred(true); // Switch to show the credential
+
+      // Now, send a POST request to the /api/create-wallet endpoint
+      try {
+        const apiResponse = await fetch('/api/create-wallet', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: customerName,
+            countryCode: countryCode,
+            credential: credential,
+          }),
+        });
+
+        if (!apiResponse.ok) {
+          throw new Error('Failed to create wallet');
+        }
+      } catch (err) {
+        console.error('Error sending POST request:', err);
+        setError('Failed to create wallet. Please try again.');
+      }
     } else {
       setError('Failed to create credential. Please try again.');
     }
@@ -62,11 +82,20 @@ export function Newcustomer() {
               className="mx-auto"
             />
           </div>
-          <div className="text-white text-2xl font-bold mb-2 text-center">Explore Web3</div>
-          <div className="text-gray-400 text-center mb-6">Step into the Future with StableWallet</div>
+          <div className="text-white text-2xl font-bold mb-2 text-center">
+            Explore Web3
+          </div>
+          <div className="text-gray-400 text-center mb-6">
+            Step into the Future with StableWallet
+          </div>
           <form className="w-full" onSubmit={createCredential}>
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-white mb-1">Name</label>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-white mb-1"
+              >
+                Name
+              </label>
               <input
                 type="text"
                 id="name"
@@ -78,7 +107,12 @@ export function Newcustomer() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="countryCode" className="block text-sm font-medium text-white mb-1">Country Code</label>
+              <label
+                htmlFor="countryCode"
+                className="block text-sm font-medium text-white mb-1"
+              >
+                Country Code
+              </label>
               <input
                 type="text"
                 id="countryCode"
@@ -89,7 +123,7 @@ export function Newcustomer() {
               />
             </div>
 
-            {error && (
+            {!error && (
               <div className="mb-4 text-red-500 text-sm font-semibold">
                 {error}
               </div>
@@ -108,5 +142,4 @@ export function Newcustomer() {
       )}
     </>
   );
-};
-
+}
