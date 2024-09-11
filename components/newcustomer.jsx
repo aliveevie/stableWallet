@@ -13,11 +13,14 @@ export function Newcustomer() {
   const [customerName, setCustomerName] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [error, setError] = useState('');
+  const [customer_id, setCustomer_id] = useState('');
+  const [data, setData] = useState('');
+
 
   useEffect(() => {
     if (state.customerDid && state.customerCredentials.length > 0) {
-      setShowCred(true);
-      setSaveCredit(state.customerCredentials[0]);
+   //   setShowCred(true);
+   //   setSaveCredit(state.customerCredentials[0]);
     }
   }, [state.customerDid, state.customerCredentials]);
 
@@ -58,6 +61,12 @@ export function Newcustomer() {
 
        const response = await apiResponse.json();
 
+       console.log(response);
+
+       if(response){
+          setData(response.customer.customer_id)
+       }
+
 
         if (!apiResponse.ok) {
           throw new Error('Failed to create wallet');
@@ -70,6 +79,14 @@ export function Newcustomer() {
       setError('Failed to create credential. Please try again.');
     }
   };
+
+  useEffect(() => {
+    if(data){
+      console.log(data)
+    }
+  }, [data])
+
+
 
   return (
     <>
@@ -151,7 +168,7 @@ export function Newcustomer() {
           </form>
         </div>
       ) : (
-        <StoreCredentials credentials={saveCred} />
+        <StoreCredentials credentials={saveCred} customer_id={customer_id} />
       )}
     </>
   );

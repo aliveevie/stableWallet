@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCopy } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
-const StoreCredentials = ({ credentials }) => {
+const StoreCredentials = ({ credentials, customer_id }) => {
+  
   const [copied, setCopied] = useState(false);
   const router = useRouter(); // Use Next.js router for redirection
+  const [id, setId] = useState('');
+  useEffect(() => {
+    if(customer_id){
+      setId(customer_id)
+    }
+}, [customer_id])
 
   const handleCopy = () => {
     navigator.clipboard.writeText(credentials).then(() => {
@@ -13,9 +20,14 @@ const StoreCredentials = ({ credentials }) => {
     });
   };
 
-  const handleContinue = () => {
-    router.push('/'); // Redirect to home page after clicking "Continue"
+  const handleContinue = async () => {
+    if(customer_id){
+      router.push(`/home?customer_id=${customer_id}`); // Redirect to home page after clicking "Continue"
+    }
+    
   };
+
+ 
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-900 rounded-lg shadow-lg max-w-md mx-auto">

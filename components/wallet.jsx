@@ -35,10 +35,10 @@ const Wallet = ({ currentData }) => {
     };
 
     const handleConfirm = () => {
-        setAmountToSend('');
-        setRecipientAddress('');
-        setRecipientAmount('');
-        setAmount('');
+     //   setAmountToSend('');
+     //   setRecipientAddress('');
+     //   setRecipientAmount('');
+     //   setAmount('');
         setIsConfirming(false);
         const dataFetch = async () => {
             await createExchange(currentData.offering, amount, { address: recipientAddress }).then(async () => {
