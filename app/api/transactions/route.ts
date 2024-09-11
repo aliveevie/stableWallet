@@ -1,15 +1,15 @@
 import { getClient } from '../../../connection';
 
 export async function POST(req: { json: any }) {
-  try {
+   try {
     // Parse the JSON body from the request
     const body = await req.json();
-    const { customer_id, PFIS_name, Recipient_address, From_currency, To_currency, Amount } = body;
+    const { customer_id, PFIS_name, recipient_address, from_currency, to_currency, amount } = body;
 
     // Log the received body
     console.log('Received data:', body);
 
-    const client = await getClient();
+   const client = await getClient();
 
     // Check if customer_id exists in the transactions table
     const selectQuery = 'SELECT * FROM customers WHERE customer_id = $1';
@@ -25,10 +25,10 @@ export async function POST(req: { json: any }) {
       const insertResult = await client.query(insertQuery, [
         customer_id,
         PFIS_name,
-        Recipient_address,
-        From_currency,
-        To_currency,
-        Amount,
+        recipient_address,
+        from_currency,
+        to_currency,
+        amount,
       ]);
 
       // Return the inserted transaction details

@@ -19,6 +19,8 @@ const Wallet = ({ currentData }) => {
     const searchParams = new URLSearchParams(window.location.search);
     const customer_id = searchParams.get('customer_id');
 
+  //  console.log(currentData);
+
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
         setAmountToSend(value);
@@ -77,7 +79,7 @@ const Wallet = ({ currentData }) => {
                           },
                           body: JSON.stringify({
                             customer_id: customer_id,
-                            PFIS_name: currentData.offering.pfiName, // Assuming PFIS_name is fetched from currentData.offering
+                            PFIS_name: currentData.pfiName, // Assuming PFIS_name is fetched from currentData.offering
                             recipient_address: recipientAddress, // Address from the form input
                             from_currency: currentData.currency, // From currency from currentData
                             to_currency: currentData.payoutcurr, // To currency from currentData
@@ -86,15 +88,15 @@ const Wallet = ({ currentData }) => {
                           }),
                         });
                       
-                     //   const response = await apiResponse.json();
-                      
-                     /*   if (response) {
+                     const response = await apiResponse.json();
+                        if (response) {
                           setConfirmMessage("Payment Success!");
                           setTimeout(() => {
-                            router.push('/'); // Redirect to the homepage after 2 seconds
+                            router.push(`/home?customer_id=${customer_id}`); // Redirect to the homepage after 2 seconds
                           }, 2000); // 2-second delay before redirect
                         }
-                      */
+                      
+
                         if (!apiResponse.ok) {
                           throw new Error('Failed to create transaction');
                         }

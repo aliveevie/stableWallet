@@ -25,9 +25,9 @@ export async function getClient() {
   client = new Pool(config);
   await client.connect();
 
- // deleteTable(client, 'customers');
- // createCustomerTable(client);
- // createTransactionsTable(client)
+  //deleteTable(client, 'transactions');
+  // createCustomerTable(client);
+  // createTransactionsTable(client)
 
   const result = await client.query("SELECT VERSION()");
   console.log(result.rows[0].version);
