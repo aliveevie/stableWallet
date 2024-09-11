@@ -65,11 +65,42 @@ const Wallet = ({ currentData }) => {
 
         const sendCurrency = async () => {
             if (currentExc) {
-                await addOrder(currentExc.id, currentExc.pfiDid).then(() => {
-                    setConfirmMessage("Payment Success!");
-                    setTimeout(() => {
-                        router.push('/'); // Redirect to the homepage after 2 seconds
-                    }, 2000); // 2-second delay before redirect
+                await addOrder(currentExc.id, currentExc.pfiDid).then(async () => {
+                
+                    try {
+                        const apiResponse = await fetch('/api/transactions', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            customer_id: state.customerDid ? state.customerDid.uri : null, // Assuming customer_id maps to customerDid.uri
+                            PFIS_name: currentData.offering.pfiName, // Assuming PFIS_name is fetched from currentData.offering
+                            recipient_address: recipientAddress, // Address from the form input
+                            from_currency: currentData.currency, // From currency from currentData
+                            to_currency: currentData.payoutcurr, // To currency from currentData
+                            amount: amountToSend, // Amount to send from the form input
+                            date: new Date().toISOString() // Optional: current date
+                          }),
+                        });
+                      
+                     //   const response = await apiResponse.json();
+                      
+                     /*   if (response) {
+                          setConfirmMessage("Payment Success!");
+                          setTimeout(() => {
+                            router.push('/'); // Redirect to the homepage after 2 seconds
+                          }, 2000); // 2-second delay before redirect
+                        }
+                      */
+                        if (!apiResponse.ok) {
+                          throw new Error('Failed to create transaction');
+                        }
+                      } catch (err) {
+                        console.error('Error sending POST request:', err);
+                      }
+                      
+                   
                 });
             }
         };

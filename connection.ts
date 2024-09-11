@@ -2,6 +2,8 @@ import { Pool } from 'pg';
 import fs from 'fs';
 import { deleteTable } from './databases/tables/queries';
 import { createCustomerTable } from './databases/tables/wallet_table';
+import { createTransactionsTable } from './databases/tables/queries';
+
 
 const config = {
   user: "avnadmin",
@@ -25,6 +27,7 @@ export async function getClient() {
 
  // deleteTable(client, 'customers');
  // createCustomerTable(client);
+  createTransactionsTable(client)
 
   const result = await client.query("SELECT VERSION()");
   console.log(result.rows[0].version);
