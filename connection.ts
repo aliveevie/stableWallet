@@ -1,6 +1,7 @@
 const fs = require('fs');
 const pg = require('pg');
 const url = require('url');
+const createCustomerTable = require('./databases/tables/wallet_table');
 
 const config = {
     user: "avnadmin",
@@ -39,17 +40,19 @@ MuBZSlm41QimwxT2wV0AIahp0UuPzAAtDrtKB66wisSP5MVhAA==
 };
 
 const client = new pg.Client(config);
-client.connect(function (err) {
+client.connect(function (err:any) {
     if (err)
         throw err;
-    client.query("SELECT VERSION()", [], function (err, result) {
+    client.query("SELECT VERSION()", [], function (err:any, result:any) {
         if (err)
             throw err;
 
         console.log(result.rows[0].version);
-        console.log("Connection Successful!")
+        console.log("Connection Successful!");
+        createCustomerTable(client);
        
     });
 });
+
 
 export default client;

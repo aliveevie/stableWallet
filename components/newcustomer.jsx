@@ -107,21 +107,33 @@ export function Newcustomer() {
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="countryCode"
-                className="block text-sm font-medium text-white mb-1"
-              >
-                Country Code
-              </label>
-              <input
-                type="text"
-                id="countryCode"
-                placeholder="Enter your country code"
-                className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                onChange={(e) => setCountryCode(e.target.value)}
-                required
-              />
-            </div>
+      <label
+        htmlFor="countryCode"
+        className="block text-sm font-medium text-white mb-1"
+      >
+        Country Code
+      </label>
+      <select
+        id="countryCode"
+        className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+        value={countryCode}
+        onChange={(e) => setCountryCode(e.target.value)}
+        required
+      >
+        <option value="">Select Country</option>
+        <option value="NG">Nigeria</option>
+        <option value="GH">Ghana</option>
+        <option value="KE">Kenya</option>
+        <option value="NE">Niger</option>
+        <option value="TG">Togo</option>
+        <option value="ZA">South Africa</option>
+        <option value="EG">Egypt</option>
+        <option value="DZ">Algeria</option>
+        <option value="ET">Ethiopia</option>
+        <option value="SN">Senegal</option>
+      </select>
+    </div>
+
 
             {!error && (
               <div className="mb-4 text-red-500 text-sm font-semibold">
