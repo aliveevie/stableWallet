@@ -480,6 +480,7 @@ const useStore = () => {
       await initializeDid();
       loadCredentials();
       await fetchOfferings();
+   // localStorage.clear();
     };
     init();
   }, [fetchOfferings, initializeDid]);
