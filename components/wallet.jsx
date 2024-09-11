@@ -16,6 +16,8 @@ const Wallet = ({ currentData }) => {
     const [currentExc, setCurrentExc] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
     const router = useRouter(); // Hook for navigation
+    const searchParams = new URLSearchParams(window.location.search);
+    const customer_id = searchParams.get('customer_id');
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
@@ -74,7 +76,7 @@ const Wallet = ({ currentData }) => {
                             'Content-Type': 'application/json',
                           },
                           body: JSON.stringify({
-                            customer_id: state.customerDid ? state.customerDid.uri : null, // Assuming customer_id maps to customerDid.uri
+                            customer_id: customer_id,
                             PFIS_name: currentData.offering.pfiName, // Assuming PFIS_name is fetched from currentData.offering
                             recipient_address: recipientAddress, // Address from the form input
                             from_currency: currentData.currency, // From currency from currentData

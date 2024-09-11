@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 
 const StoreCredentials = ({ credentials, customer_id }) => {
   
+  console.log(customer_id)
+
   const [copied, setCopied] = useState(false);
   const router = useRouter(); // Use Next.js router for redirection
   const [id, setId] = useState('');

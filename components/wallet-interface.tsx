@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FaBars, FaPaperPlane, FaDownload, FaSyncAlt, FaHistory, FaLifeRing, FaWallet, FaCog, FaLiraSign, FaPoundSign, FaDollarSign, FaEuroSign, } from 'react-icons/fa'
@@ -14,7 +14,8 @@ import Euro from '../public/icons/euro.png';
 import  Link  from 'next/link';
 
 export function WalletInterface() {
-  const [balance, setBalance] = useState(1234.56)
+  const [id, setId] = useState('');
+  const [balance, setBalance] = useState(100)
   const [assets, setAssets] = useState([
     { name: 'Nigerian Naira', amount: 0, value: 0.0, icon: Naira, symbol: 'Naira', sym: '₦' },
     { name: 'Ghanaian Cedi', amount: 0, value: 0.0, icon: Cedi, symbol: 'Ghana Cedi', sym: '₵' },
@@ -22,6 +23,17 @@ export function WalletInterface() {
     { name: 'US Dollar', amount: 0, value: 0.0, icon: Dollar, symbol: 'Dollar', sym:'$' },
     { name: 'Euro', amount: 0, value: 0, icon: Euro, symbol: 'Euro', sym: '£'},
   ]);
+
+  useEffect(() => {
+    // Extract customer_id from the query string
+    const searchParams = new URLSearchParams(window.location.search);
+    const customer_id = searchParams.get('customer_id');
+    
+    if (customer_id) {
+      setId(customer_id); // Set the customer_id to the state
+    }
+  }, []);
+
 
 
   return (
@@ -41,7 +53,7 @@ export function WalletInterface() {
         </div>
 
         <div className="flex justify-center space-x-4 mb-4">
-          <Link href='/send'>
+          <Link href={`/send?customer_id=${id}`}>
           <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
             <FaPaperPlane className="w-20 h-20 mb-1" />
                 <span className="text-xs">Send</span>
@@ -51,7 +63,7 @@ export function WalletInterface() {
           
           <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
             <FaDownload className="w-20 h-20 mb-1" />
-            <Link href='/receive'>
+            <Link href={`/receive?customer_id=${id}`}>
                 <span className="text-">Receive</span>
             </Link>
           </Button>

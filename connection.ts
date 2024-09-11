@@ -27,7 +27,7 @@ export async function getClient() {
 
  // deleteTable(client, 'customers');
  // createCustomerTable(client);
-//  createTransactionsTable(client)
+ // createTransactionsTable(client)
 
   const result = await client.query("SELECT VERSION()");
   console.log(result.rows[0].version);

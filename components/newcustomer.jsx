@@ -13,14 +13,13 @@ export function Newcustomer() {
   const [customerName, setCustomerName] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [error, setError] = useState('');
-  const [customer_id, setCustomer_id] = useState('');
+  const [customerId, setCustomerId] = useState(''); // Correct variable for customer_id
   const [data, setData] = useState('');
-
 
   useEffect(() => {
     if (state.customerDid && state.customerCredentials.length > 0) {
-   //   setShowCred(true);
-   //   setSaveCredit(state.customerCredentials[0]);
+      //   setShowCred(true);
+      //   setSaveCredit(state.customerCredentials[0]);
     }
   }, [state.customerDid, state.customerCredentials]);
 
@@ -59,14 +58,12 @@ export function Newcustomer() {
           }),
         });
 
-       const response = await apiResponse.json();
+        const jsonResponse = await apiResponse.json();
 
-       console.log(response);
-
-       if(response){
-          setData(response.customer.customer_id)
-       }
-
+        if (jsonResponse && jsonResponse.customer) {
+          // Store the customer_id returned from the API response
+          setCustomerId(jsonResponse.customer.customer_id);
+        }
 
         if (!apiResponse.ok) {
           throw new Error('Failed to create wallet');
@@ -81,12 +78,12 @@ export function Newcustomer() {
   };
 
   useEffect(() => {
-    if(data){
-      console.log(data)
+    if (customerId) {
+      setShowCred(true);
+      setSaveCredit(state.customerCredentials[0]);
+      console.log(customerId)
     }
-  }, [data])
-
-
+  }, [customerId]);
 
   return (
     <>
@@ -127,32 +124,33 @@ export function Newcustomer() {
             </div>
 
             <div className="mb-4">
-      <label
-        htmlFor="countryCode"
-        className="block text-sm font-medium text-white mb-1"
-      >
-        Country Code
-      </label>
-      <select
-        id="countryCode"
-        className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-        value={countryCode}
-        onChange={(e) => setCountryCode(e.target.value)}
-        required
-      >
-        <option value="">Select Country</option>
-        <option value="NG">Nigeria</option>
-        <option value="GH">Ghana</option>
-        <option value="KE">Kenya</option>
-        <option value="NE">Niger</option>
-        <option value="TG">Togo</option>
-        <option value="ZA">South Africa</option>
-        <option value="EG">Egypt</option>
-        <option value="DZ">Algeria</option>
-        <option value="ET">Ethiopia</option>
-        <option value="SN">Senegal</option>
-      </select>
-    </div>
+              <label
+                htmlFor="countryCode"
+                className="block text-sm font-medium text-white mb-1"
+              >
+                Country Code
+              </label>
+              <select
+                id="countryCode"
+                className="w-full px-3 py-2 rounded-md border border-green-500 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={countryCode}
+                onChange={(e) => setCountryCode(e.target.value)}
+                required
+              >
+                <option value="">Select Country</option>
+                <option value="NG">Nigeria</option>
+                <option value="GH">Ghana</option>
+                <option value="KE">Kenya</option>
+                <option value="NE">Niger</option>
+                <option value="TG">Togo</option>
+                <option value="ZA">South Africa</option>
+                <option value="EG">Egypt</option>
+                <option value="DZ">Algeria</option>
+                <option value="ET">Ethiopia</option>
+                <option value="SN">Senegal</option>
+              </select>
+            </div>
+
             {error && (
               <div className="mb-4 text-red-500 text-sm font-semibold">
                 {error}
@@ -168,7 +166,7 @@ export function Newcustomer() {
           </form>
         </div>
       ) : (
-        <StoreCredentials credentials={saveCred} customer_id={customer_id} />
+        <StoreCredentials credentials={saveCred} customer_id={customerId} />
       )}
     </>
   );
