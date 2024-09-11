@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import useStore from '../../functions/main';
-import ConfirmTransaction from './confirm';
+import useStore from '../functions/main';
+import ConfirmTransaction from '../app/components/confirm';
 import { useRouter } from 'next/navigation'; // For navigation on success
-import styles from '../styles/Wallet.module.css';
-
+import styles from '../app/styles/Wallet.module.css';
 
 const Wallet = ({ currentData }) => {
-    console.log(currentData)
     const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD

@@ -475,12 +475,13 @@ const useStore = () => {
     }));
   };
 
+  
   useEffect(() => {
     const init = async () => {
     await initializeDid();
     loadCredentials();
     await fetchOfferings();
-   // localStorage.clear();
+    // localStorage.clear();
     };
     init();
   }, [fetchOfferings, initializeDid]);

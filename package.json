@@ -34,6 +34,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/react": "18.3.5",
     "assert": "^2.1.0",
     "crypto-browserify": "^3.12.0",

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import useStore from '../functions/main';  // Import your store functions
 import Loader from '../app/components/loader';  // Import the loader component
-import Wallet from '../app/components/wallet';
+import Wallet from './wallet';
 
 export function Send() {
   const { state } = useStore();

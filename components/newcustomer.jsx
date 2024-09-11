@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import useStore from '../functions/main';
-import StoreCredentials from '../app/components/storeCred';
+import StoreCredentials from './storeCred';
 
 export function Newcustomer() {
   const { state, addCredential } = useStore();
@@ -16,8 +16,8 @@ export function Newcustomer() {
 
   useEffect(() => {
     if (state.customerDid && state.customerCredentials.length > 0) {
-     // setShowCred(true);
-    //  setSaveCredit(state.customerCredentials[0]);
+      setShowCred(true);
+      setSaveCredit(state.customerCredentials[0]);
     }
   }, [state.customerDid, state.customerCredentials]);
 
@@ -40,7 +40,7 @@ export function Newcustomer() {
     if (credential) {
       addCredential(credential); // Storing the credential
       setSaveCredit(credential);
-   //   setShowCred(true); // Switch to show the credential
+      setShowCred(true); // Switch to show the credential
 
       // Now, send a POST request to the /api/create-wallet endpoint
       try {
@@ -56,9 +56,7 @@ export function Newcustomer() {
           }),
         });
 
-        const response = await apiResponse.json();
-        console.log(response)
-
+       const response = await apiResponse.json();
 
 
         if (!apiResponse.ok) {
@@ -138,9 +136,7 @@ export function Newcustomer() {
         <option value="SN">Senegal</option>
       </select>
     </div>
-
-
-            {!error && (
+            {error && (
               <div className="mb-4 text-red-500 text-sm font-semibold">
                 {error}
               </div>
