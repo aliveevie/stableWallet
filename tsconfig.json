@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -34,7 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "components/Newcustomer.jsx"  ],
+, "components/Newcustomer.jsx", "connection.js", "lib/db.js", "lib/db.js", "databases/tables/wallet_table.js"  ],
   "exclude": [
     "node_modules"
   ]

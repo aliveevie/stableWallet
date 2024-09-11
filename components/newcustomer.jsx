@@ -56,6 +56,11 @@ export function Newcustomer() {
           }),
         });
 
+        const response = await apiResponse.json();
+        console.log(response)
+
+
+
         if (!apiResponse.ok) {
           throw new Error('Failed to create wallet');
         }

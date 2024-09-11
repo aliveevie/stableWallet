@@ -1,8 +1,9 @@
 export async function createCustomerTable(client:any) {
   const createTableQuery = `
     CREATE TABLE IF NOT EXISTS customers (
-      id SERIAL PRIMARY KEY,
+      customer_id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
+      country_code VARCHAR(255) NOT NULL,
       credential TEXT NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     )
