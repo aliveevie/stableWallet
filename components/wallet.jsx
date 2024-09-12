@@ -29,6 +29,7 @@ const Wallet = ({ currentData }) => {
         setRecipientAmount(convertedValue); // Simulating same for recipient
     };
 
+  
     const handleSend = (e) => {
         e.preventDefault();
         if (amountToSend && recipientAddress) {
@@ -46,6 +47,7 @@ const Wallet = ({ currentData }) => {
         setIsConfirming(false);
         const dataFetch = async () => {
             await createExchange(currentData.offering, amount, { address: recipientAddress }).then(async () => {
+                console.log(currentData.offering)
                 const data = await fetchExchanges(currentData.offering.metadata.from);
                 if (data) {
                     setExchange(data);
@@ -89,11 +91,16 @@ const Wallet = ({ currentData }) => {
                         });
                       
                      const response = await apiResponse.json();
-                        if (response) {
+                        if (response.message == 'Transaction inserted successfully') {
                           setConfirmMessage("Payment Success!");
                           setTimeout(() => {
                             router.push(`/home?customer_id=${customer_id}`); // Redirect to the homepage after 2 seconds
                           }, 2000); // 2-second delay before redirect
+                        }else{
+                            setConfirmMessage("Transaction Failed please try again");
+                            setTimeout(() => {
+                                window.reload(); // Redirect to the homepage after 2 seconds
+                              }, 3000); // 2-second delay before redirect
                         }
                       
 
@@ -116,7 +123,8 @@ const Wallet = ({ currentData }) => {
             <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
                 <form onSubmit={handleSend}>
                     <div className="flex justify-between items-center mb-4">
-                        <button className="text-white text-lg">
+                        <button 
+                        className="text-white text-lg">
                             &#8592;
                         </button>
                         <h2 className="text-xl font-bold">Send</h2>
