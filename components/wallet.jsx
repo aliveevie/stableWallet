@@ -42,7 +42,6 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
      setRecipientAddress(value)
     };
 
-    console.log(recipientAddress);
 
     const handleBackButton = () => {
           setWalletAddress(false)
@@ -110,7 +109,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
 
     useEffect(() => {
         if (exchange) {
-            console.log(exchange)
+         //   console.log(exchange)
             setCurrentExc(exchange[exchange.length - 1]);
         }
 

@@ -3,7 +3,7 @@ import fs from 'fs';
 import { deleteTable } from './databases/tables/queries';
 import { createCustomerTable } from './databases/tables/wallet_table';
 import { createTransactionsTable } from './databases/tables/queries';
-
+require('dotenv').config();
 
 const config = {
   user: "avnadmin",
@@ -12,8 +12,8 @@ const config = {
   port: 14636,
   database: "defaultdb",
   ssl: {
-    rejectUnauthorized: true,
-    ca: fs.readFileSync('./ca.pem').toString(),
+    rejectUnauthorized: false,
+    ca: fs.readFileSync('./ca.pem').toString() || process.env.CA
   },
 };
 

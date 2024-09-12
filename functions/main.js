@@ -114,7 +114,7 @@ const useStore = () => {
   }, [state.pfiAllowlist]);
 
   const createExchange = async (offering, amount, payoutPaymentDetails) => {
-    console.log(offering, amount, payoutPaymentDetails)
+  //  console.log(offering, amount, payoutPaymentDetails)
     const { Rfq, TbdexHttpClient } = await import('@tbdex/http-client');
     const { PresentationExchange } = await import('@web5/credentials')
 
@@ -146,9 +146,7 @@ const useStore = () => {
 
     try {
         await rfq.verifyOfferingRequirements(offering);
-        if(rfq){
-          console.log(rfq)
-        }
+     
     } catch (e) {
       console.log('Offering requirements not met', e);
     }
