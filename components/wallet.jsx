@@ -23,9 +23,26 @@ const Wallet = ({ currentData }) => {
   //  console.log(currentData);
 
   useEffect(() => {
-    setPaymentDetails(currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties)
+    if (currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties) {
+        const details = currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties;
+        // Initialize paymentDetails with keys from the payout method
+        const initializedDetails = Object.keys(details).reduce((acc, key) => {
+            acc[key] = ''; // Set default empty string for each key
+            return acc;
+        }, {});
+        setPaymentDetails(initializedDetails);
+    }
+}, [currentData]);
+
+    const handlePaymentDetailChange = (key, value) => {
+    setPaymentDetails((prevDetails) => ({
+        ...prevDetails,
+        [key]: value,
+    }));
+    };
+
     console.log(paymentDetails)
-  }, [paymentDetails.value])
+
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
@@ -173,18 +190,28 @@ const Wallet = ({ currentData }) => {
                     </div>
 
                     {/* Recipient Address Section */}
-                    <div className="mb-6">
-                        <label htmlFor="recipient" className="block text-sm font-bold text-gray-400 mb-2">Recipient Address</label>
-                        <input
-                            type="text"
-                            id="recipient"
-                            value={recipientAddress}
-                            onChange={(e) => setRecipientAddress(e.target.value)}
-                            className="w-full px-4 py-2 bg-gray-800 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-                            placeholder="Enter recipient address"
-                            required
-                        />
-                    </div>
+
+                    {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
+                        Object.entries(paymentDetails).map(([key, value]) => (
+                            <div key={key} className="mb-4">
+                                <label htmlFor={key} className="block text-sm font-bold text-gray-400 mb-2">
+                                    {currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties[key].title}
+                                </label>
+                                <input
+                                    type={currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties[key].type}
+                                    value={value}
+                                    onChange={(e) => handlePaymentDetailChange(key, e.target.value)}
+                                    className="w-full px-4 py-2 bg-gray-800 text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                    placeholder={`Enter ${currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties[key].description}`}
+                                    required
+                                />
+                                <small className="block text-gray-500">
+                                    {currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties[key].description}
+                                </small>
+                            </div>
+                        ))
+                    )}
+
 
                     {/* Send Button */}
                     <button
