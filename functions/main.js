@@ -145,15 +145,18 @@ const useStore = () => {
     });
 
     try {
-      rfq.verifyOfferingRequirements(offering);
+        await rfq.verifyOfferingRequirements(offering);
+        if(rfq){
+          console.log(rfq)
+        }
     } catch (e) {
       console.log('Offering requirements not met', e);
     }
 
-    await rfq.sign(state.customerDid);
+     await rfq.sign(state.customerDid);
 
     try {
-      await TbdexHttpClient.createExchange(rfq);
+       await TbdexHttpClient.createExchange(rfq);
     } catch (error) {
       console.error('Failed to create exchange:', error);
     }
@@ -197,7 +200,10 @@ const useStore = () => {
   };
 
   const addOrder = async (exchangeId, pfiUri) => {
+
+    console.log(exchangeId, pfiUri)
     const { Order, TbdexHttpClient } = await import('@tbdex/http-client');
+
 
     const order = Order.create({
       metadata: {
@@ -209,7 +215,7 @@ const useStore = () => {
 
     await order.sign(state.customerDid);
     try {
-      return await TbdexHttpClient.submitOrder(order);
+        await TbdexHttpClient.submitOrder(order);
     } catch (error) {
       console.error('Failed to submit order:', error);
     }

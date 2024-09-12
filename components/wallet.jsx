@@ -18,8 +18,14 @@ const Wallet = ({ currentData }) => {
     const router = useRouter(); // Hook for navigation
     const searchParams = new URLSearchParams(window.location.search);
     const customer_id = searchParams.get('customer_id');
+    const [paymentDetails, setPaymentDetails] = useState({});
 
   //  console.log(currentData);
+
+  useEffect(() => {
+    setPaymentDetails(currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties)
+    console.log(paymentDetails)
+  }, [paymentDetails.value])
 
     const handleAmountChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensures only numbers
@@ -45,18 +51,27 @@ const Wallet = ({ currentData }) => {
      //   setRecipientAmount('');
      //   setAmount('');
         setIsConfirming(false);
-        const dataFetch = async () => {
-            await createExchange(currentData.offering, amount, { address: recipientAddress }).then(async () => {
-                console.log(currentData.offering)
-                const data = await fetchExchanges(currentData.offering.metadata.from);
-                if (data) {
-                    setExchange(data);
-                }
-            });
-        };
-        setTransactions(true);
-        setConfirmMessage("Transactions in process...");
-        dataFetch();
+
+        try {
+            const dataFetch = async () => {
+           //     await createExchange(currentData.offering, amount, { accountNumber: recipientAddress }).then(async () => {
+           //     console.log(currentData.offering)
+           //     const data = await fetchExchanges(currentData.offering.metadata.from);
+           //     if (data) {
+           //             setExchange(data);
+          //    }
+          //  });
+            };
+            setTransactions(true);
+            setConfirmMessage("Transactions in process...");
+            dataFetch();
+        }catch  {
+            console.error("Error creating exchange or fetching exchanges:", error);
+            setConfirmMessage("Transaction Failed, please try again");
+            setTimeout(() => {
+              window.location.reload(); // Reload the page after 3 seconds
+            }, 3000);
+        }
     };
 
     const handleCancel = () => {
@@ -66,13 +81,14 @@ const Wallet = ({ currentData }) => {
 
     useEffect(() => {
         if (exchange) {
+            console.log(exchange)
             setCurrentExc(exchange[exchange.length - 1]);
         }
 
         const sendCurrency = async () => {
             if (currentExc) {
                 await addOrder(currentExc.id, currentExc.pfiDid).then(async () => {
-                
+                    
                     try {
                         const apiResponse = await fetch('/api/transactions', {
                           method: 'POST',
@@ -103,7 +119,6 @@ const Wallet = ({ currentData }) => {
                               }, 3000); // 2-second delay before redirect
                         }
                       
-
                         if (!apiResponse.ok) {
                           throw new Error('Failed to create transaction');
                         }
