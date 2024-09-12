@@ -23,12 +23,9 @@ export function Send() {
   const [activeIndex, setActiveIndex] = useState(false);
   const [activeData, setActiveData] = useState('');
 
-  
-
   const handleSend = () => {
         setWalletAddress(true)
   };
-
 
     // Function to handle item click
     const handleItemClick = (index) => {
@@ -113,23 +110,6 @@ export function Send() {
   }
   
       else{
-
-      /* 
-      *
-      * if(newSetOfOfferings[0].data.description){
-          setDescription(newSetOfOfferings[0].data.description)
-          setPayPerUnit(newSetOfOfferings[0].data.paypayoutUnitsPerPayinUnit)
-          setUri(newSetOfOfferings[0].metadata.from)
-          if(uri){
-            for(const pfi of state.pfiAllowlist){
-                if(pfi.pfiUri == uri){
-                setShowPFI(pfi)
-                console.log(showPFI)
-              }
-            }
-          }
-        } */
-
         const matchedPFIs = newSetOfOfferings.map((offering) => {
             const matchedPFI = state.pfiAllowlist.find(
               (pfi) => pfi.pfiUri === offering.metadata.from
@@ -248,7 +228,7 @@ export function Send() {
             </>
         ) : (
             // Show the Wallet component when the form is hidden
-            <Wallet currentData={activeData} /> // Passing exchange rate from the first PFI as an example
+            <Wallet currentData={activeData} walletAddress={walletAddress} setWalletAddress={setWalletAddress} /> // Passing exchange rate from the first PFI as an example
         )}
     </div>
 );
