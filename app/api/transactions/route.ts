@@ -1,6 +1,6 @@
 import { getClient } from '../../../connection';
 
-export async function POST(req: { json: any }) {
+export async function POST(req: any) {
    try {
     // Parse the JSON body from the request
     const body = await req.json();
