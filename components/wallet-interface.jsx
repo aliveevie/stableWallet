@@ -43,12 +43,12 @@ export function WalletInterface() {
 
       <main className="flex-1 overflow-hidden flex flex-col">
         <div className="text-center py-4">
-          <h1 className="text-3xl font-bold">${balance.toFixed(2)}</h1>
+          <h1 className="text-3xl font-bold">$1,000,000</h1>
           <p className="text-gray-400 text-xs">Available Balance <span className="text-gray-500">ⓘ</span></p>
         </div>
 
         <div className="flex justify-center space-x-4 mb-4">
-          <Link href={`/send?customer_id=${id}`}>
+          <Link href={`/pages/send?customer_id=${id}`}>
           <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
             <FaPaperPlane className="w-20 h-20 mb-1" />
                 <span className="text-xs">Send</span>
@@ -66,7 +66,7 @@ export function WalletInterface() {
 
         <div className="flex-1 overflow-hidden flex flex-col px-4">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-sm font-semibold">My Assets</h2>
+            <h2 className="text-sm font-semibold">Available Currencies</h2>
             <Button variant="ghost" size="sm" className="text-xs text-gray-400 hover:text-black">
               <FaSyncAlt className="w-3 h-3 mr-1" />
               Refresh
@@ -80,13 +80,9 @@ export function WalletInterface() {
                   <Image src={asset.icon} alt={asset.name} width={24} height={24} className="rounded-full" />
                   <div>
                     <p className="font-medium text-sm text-white">{asset.symbol}</p>
-                    <p className="text-xs text-gray-400">${asset.value}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-medium text-sm text-white">{asset.amount.toLocaleString()}</p>
-                  <p className="text-xs text-gray-400">{asset.sym}{0}</p>
-                </div>
+              
               </Card>
             ))}
           </div>
