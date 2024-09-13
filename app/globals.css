@@ -16,6 +16,16 @@
   }
 }
 
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
 body {
   background: url('../public/background.webp');
 
