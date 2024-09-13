@@ -168,7 +168,8 @@ const useStore = () => {
         did: state.customerDid,
       });
 
-      const mappedExchanges = formatMessages(exchanges);
+      const mappedExchanges =  formatMessages(exchanges);
+      console.log(mappedExchanges)
       return mappedExchanges;
     } catch (error) {
       console.error('Failed to fetch exchanges:', error);
@@ -221,15 +222,18 @@ const useStore = () => {
       if (!state.customerDid) return;
       const allExchanges = [];
       try {
-        for (const pfi of state.pfiAllowlist) {
-          const exchanges = await fetchExchanges(pfi.pfiUri);
-          allExchanges.push(...exchanges);
+        if(state.pfiAllowlist){
+          for (const pfi of state.pfiAllowlist) {
+            const exchanges = await fetchExchanges(pfi.pfiUri);
+            allExchanges.push(...exchanges);
+          }
+          updateExchanges(allExchanges.reverse());
+          setState((prevState) => ({
+            ...prevState,
+            transactionsLoading: false,
+          }));
         }
-        updateExchanges(allExchanges.reverse());
-        setState((prevState) => ({
-          ...prevState,
-          transactionsLoading: false,
-        }));
+       
       } catch (error) {
         console.error('Failed to fetch exchanges:', error);
       }

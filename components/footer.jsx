@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaWallet, FaPaperPlane, FaHistory, FaBars } from 'react-icons/fa';
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-800 p-4 flex justify-around shadow-inner">
       <FaWallet className="text-2xl cursor-pointer text-green-500" />
@@ -12,4 +12,3 @@ const Footer = () => {
   );
 };
 
-export default Footer;

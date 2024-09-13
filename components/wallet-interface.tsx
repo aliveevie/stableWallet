@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FaBars, FaPaperPlane, FaDownload, FaSyncAlt, FaHistory, FaLifeRing, FaWallet, FaCog, FaLiraSign, FaPoundSign, FaDollarSign, FaEuroSign, } from 'react-icons/fa'
 import Image from 'next/image'
-import Footer from '@/app/components/footer'
 import Naira from '../public/icons//naira-sign.png';
 import Dollar from '../public/icons/dollar.png';
 import Cedi from '../public/icons/cedi.png';
 import Kenyan from '../public/icons/shilling-shilling.png';
 import Euro from '../public/icons/euro.png';
 import  Link  from 'next/link';
+import { Footer } from '@/components/footer';
 
 export function WalletInterface() {
   const [id, setId] = useState('');
