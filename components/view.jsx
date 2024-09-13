@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import useStore from '../functions/main';
 import Link from 'next/link';
-
-
+import styles from '../app/styles/view.module.css';
 
 const View = () => {
   const { state, capitalizePfiName } = useStore();
   const [sign, setSign] = useState(true);
+  const [pfiName, setPfiName] = useState([{}]);
+
 
   useEffect(() => {
     const handleSign = async () => {
@@ -29,13 +30,13 @@ const View = () => {
       {/* Create Credentials or Continue Buttons */}
       <div className="flex flex-col items-center w-full mb-6">
         {sign ? (
-          <Link href="/create">
+          <Link href="/pages/create">
             <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300 w-full">
               Create Credentials
             </button>
           </Link>
         ) : (
-          <Link href="/continue">
+          <Link href="/pages/home">
             <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:from-blue-600 hover:to-purple-700 transition duration-300 w-full">
               Continue
             </button>
@@ -46,7 +47,7 @@ const View = () => {
       {/* Offerings Section */}
       <div className="w-full">
         <h2 className="text-xl font-bold text-white mb-4 text-center">Available Offerings</h2>
-        <div className="space-y-4">
+        <div className="space-y-4 flex flex-col items-center"> {/* Added flex-col and margin */}
           {state.pfiAllowlist?.map((pfi, index) => (
             <Link href={`/pfi/${pfi.pfiUri}`} key={index}>
               <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition duration-300">
