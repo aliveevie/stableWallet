@@ -8,7 +8,7 @@ import { Footer } from './footer';
 
 
 export function Send() {
-  const { state } = useStore();
+  const { state, capitalizePfiName } = useStore();
   const [walletAddress, setWalletAddress] = useState(false);
   const [currency, setCurrency] = useState('');  // PayIn currency
   const [crypto, setCrypto] = useState('');  // Payout currency
@@ -24,18 +24,31 @@ export function Send() {
   const [payPerUnit, setPayPerUnit] = useState([]);
   const [outcurr, setOurcurr] = useState('');
   const [activeIndex, setActiveIndex] = useState(false);
-  const [activeData, setActiveData] = useState('');
+  const [activeData, setActiveData] = useState(null);
+  const [bgColor, setBgColor] = useState("bg-gray-700"); // To track background color of the clicked item
 
 
   const handleSend = () => {
-        setWalletAddress(true)
+        if(activeData){
+          setWalletAddress(true)
+        }else{
+          alert("Select Offerings to continue!")
+        }
   };
 
     // Function to handle item click
-    const handleItemClick = (index) => {
-        setActiveIndex(true); // Set the active index
-        setActiveData(index)
+    const handleItemClick = (pfi, index) => {
+        setActiveIndex(index); // Set the active index
+        setActiveData(pfi)
+        setBgColor("bg-green-500");
     };
+
+    const handleCurrencyChange = (e) => {
+      setCurrency(e.target.value); // Set the selected currency
+      setActiveIndex(null); // Reset the active PFI
+      setBgColor("bg-gray-700"); // Reset background color to default
+      setActiveData(null)
+  };
 
   useEffect(() => {
     async function getOffering() {
@@ -165,7 +178,7 @@ export function Send() {
             <select
               id="currency"
               value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+              onChange={handleCurrencyChange}
               className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option disabled value="" key="selectCurrency">Select currency</option>
@@ -205,12 +218,12 @@ export function Send() {
                       {showPFI.map((pfi, index) => (
                         <li
                           key={index}
-                          className={`p-4 bg-gray-700 rounded-lg mb-2 ${activeIndex
-                              ? 'bg-green-500'
+                          className={`p-4 bg-gray-700 rounded-lg mb-2 ${activeIndex === index
+                              ?  bgColor
                               : 'bg-gray-700 hover:bg-gray-600'}`} // Conditional class for active or hover state
-                          onClick={() => handleItemClick(pfi)} // Set item as active on click
+                          onClick={() => handleItemClick(pfi, index)} // Set item as active on click
                         >
-                          <div className="font-semibold">{pfi.pfiName}</div>
+                          <div className="font-semibold">{capitalizePfiName(pfi.pfiName)}</div>
                           <div className="text-sm text-blue-400">
                             {pfi.payPerUnit} {outcurr} for 1 {currency}
                           </div>

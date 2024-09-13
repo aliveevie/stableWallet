@@ -49,7 +49,7 @@ const View = () => {
         <h2 className="text-xl font-bold text-white mb-4 text-center">Available Offerings</h2>
         <div className="space-y-4 flex flex-col items-center"> {/* Added flex-col and margin */}
           {state.pfiAllowlist?.map((pfi, index) => (
-            <Link href={`/pfi/${pfi.pfiUri}`} key={index}>
+            <Link href={`#`} key={index}>
               <div className="bg-gray-800 text-white p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition duration-300">
                 <p className="font-semibold">{capitalizePfiName(pfi.pfiName)}</p> {/* Capitalized name */}
               </div>
