@@ -198,10 +198,7 @@ const useStore = () => {
   };
 
   const addOrder = async (exchangeId, pfiUri) => {
-
-    console.log(exchangeId, pfiUri)
-    const { Order, TbdexHttpClient } = await import('@tbdex/http-client');
-
+  const { Order, TbdexHttpClient } = await import('@tbdex/http-client');
 
     const order = Order.create({
       metadata: {
@@ -479,6 +476,14 @@ const useStore = () => {
     }));
   };
 
+  const capitalizePfiName = (pfiName) => {
+    return pfiName
+      .replace(/_/g, ' ') // Replace underscores with spaces
+      .split(' ')         // Split the name into words
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter of each word
+      .join(' ');         // Join the words back into a single string
+  };
+  
   
   useEffect(() => {
     const init = async () => {
@@ -509,6 +514,7 @@ const useStore = () => {
     addClose,
     getOfferingById,
     pollExchanges,
+    capitalizePfiName,
     initializeDid,
   };
 };
