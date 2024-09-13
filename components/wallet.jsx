@@ -20,7 +20,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
     const customer_id = searchParams.get('customer_id');
     const [paymentDetails, setPaymentDetails] = useState({});
 
-  //  console.log(currentData);
+    console.log(currentData);
 
   useEffect(() => {
     if (currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties) {
@@ -119,7 +119,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                  
                     setConfirmMessage("Payment Success!");
                     setTimeout(() => {
-                      router.push(`/home?customer_id=${customer_id}`); // Redirect to the homepage after 2 seconds
+                      router.push(`/pages/home`); // Redirect to the homepage after 2 seconds
                     }, 2000); // 2-second delay before redirect
 
                /*   try {
@@ -207,9 +207,10 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
 
                   {/* Recipient Address Section */}
 
-                  {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
+                <div className='overflow-y-auto' >
+                {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
                       Object.entries(paymentDetails).map(([key, value]) => (
-                          <div key={key} className="mb-4">
+                          <div key={key} className="mb-2">
                               <label htmlFor={key} className="block text-sm font-bold text-gray-400 mb-2">
                                   {currentData.offering.data.payout.methods[0].requiredPaymentDetails.properties[key].title}
                               </label>
@@ -227,8 +228,8 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                           </div>
                       ))
                   )}
-
-
+                </div>
+              
                   {/* Send Button */}
                   <button
                       type="submit"
@@ -283,7 +284,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                        </div>
                    )}
                    {confirmMessage === "Payment Success!" && (
-                       <p className="text-gray-400 mt-2">Redirecting to the homepage...</p>
+                       <p className="text-gray-400 mt-2">Redirecting Home...</p>
                    )}
                </div>
            </div>

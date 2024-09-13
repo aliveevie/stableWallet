@@ -137,7 +137,7 @@ export function Send() {
               pfiName: matchedPFI.pfiName,  // PFI Name
               payPerUnit: offering.data.payoutUnitsPerPayinUnit,  // Set PayPerUnit
               currency: currency,
-              payoutCurr: payout[0],
+              payoutcurr: payout[0],
               offering: offering
             };
           }
