@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Loader from './loader'; // Import the existing loader component
+import Loader from '../../components/loader'; // Import the existing loader component
 import useStore from '../../functions/main';
-
 
 const ConfirmTransaction = ({ currentData, amount, recipientAddress }) => {
   const [loading, setLoading] = useState(true);

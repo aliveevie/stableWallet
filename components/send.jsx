@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import useStore from '../functions/main';  // Import your store functions
-import Loader from '../app/components/loader';  // Import the loader component
+import Loader from './loader';  // Import the loader component
 import Wallet from './wallet';
+import Header from './Header';
+import { Footer } from './footer';
+
 
 export function Send() {
   const { state } = useStore();
@@ -22,6 +25,7 @@ export function Send() {
   const [outcurr, setOurcurr] = useState('');
   const [activeIndex, setActiveIndex] = useState(false);
   const [activeData, setActiveData] = useState('');
+
 
   const handleSend = () => {
         setWalletAddress(true)
@@ -148,88 +152,89 @@ export function Send() {
     );
   }
   return (
-    <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
-        <h2 className="text-xl font-bold mb-4">Send Funds</h2>
+    <>
+      <div className="w-full p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
+         <h2 className="text-xl font-bold mb-4">Send Funds</h2>
 
-        {!walletAddress ? (
-            <>
-                <div className="mb-4">
-                    <label htmlFor="currency" className="block text-sm font-medium mb-2">
-                        Choose Currency
-                    </label>
-                    <select
-                        id="currency"
-                        value={currency}
-                        onChange={(e) => setCurrency(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
-                        <option disabled value="" key="selectCurrency">Select currency</option>
-                        {payIn.map((option) => (
-                            <option key={option} value={option}>{option}</option>
-                        ))}
-                    </select>
-                </div>
+      {!walletAddress ? (
+        <>
+          <div className="mb-4">
+            <label htmlFor="currency" className="block text-sm font-medium mb-2">
+              Choose Currency
+            </label>
+            <select
+              id="currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+              className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option disabled value="" key="selectCurrency">Select currency</option>
+              {payIn.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
 
-                <div className="mb-6">
-                    <label htmlFor="crypto" className="block text-sm font-medium mb-2">
-                        To (Cryptocurrency/Currency)
-                    </label>
-                    <select
-                        id="crypto"
-                        value={payoutCurr}
-                        onChange={(e) => setPayoutCurr(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
-                        <option disabled value="" key="selectPayout">Select currency</option>
-                        {payout.map((option) => (
-                            <option key={option} value={option}>{option}</option>
-                        ))}
-                    </select>
-                </div>
+          <div className="mb-6">
+            <label htmlFor="crypto" className="block text-sm font-medium mb-2">
+              To (Cryptocurrency/Currency)
+            </label>
+            <select
+              id="crypto"
+              value={payoutCurr}
+              onChange={(e) => setPayoutCurr(e.target.value)}
+              className="w-full px-3 py-2 rounded-md border border-gray-700 bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+              <option disabled value="" key="selectPayout">Select currency</option>
+              {payout.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+          </div>
 
-                {description && (
-                    <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-bold mb-2">Description:</h3>
-                        <p>{description}</p>
+          {description && (
+            <div className="p-2 bg-gray-800 rounded-lg shadow-lg overflow-y-auto max-h-80">
+            <h3 className="text-lg font-bold mb-2">Description:</h3>
+              <p>{description}</p>
 
-                        {showPFI.length > 0 && (
-                            <>
-                                <h4 className="text-md font-semibold mt-4">Exchange Rate Offerings:</h4>
-                                <div className="mt-4">
-                                    <ul>
-                                        {showPFI.map((pfi, index) => (
-                                            <li
-                                                key={index}
-                                                className={`p-4 bg-gray-700 rounded-lg mb-2 cursor-pointer ${
-                                                    activeIndex
-                                                        ? 'bg-green-500'
-                                                        : 'bg-gray-700 hover:bg-gray-600'
-                                                }`} // Conditional class for active or hover state
-                                                onClick={() => handleItemClick(pfi)} // Set item as active on click
-                                            >
-                                                <div className="font-semibold">{pfi.pfiName}</div>
-                                                <div className="text-sm text-blue-400">
-                                                    {pfi.payPerUnit} {outcurr} for 1 {currency}
-                                                </div>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </>
-                        )}
-                        <button
-                            onClick={handleSend}
-                            className="w-full py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300"
+              {showPFI.length > 0 && (
+                <>
+                  <h4 className="text-md font-semibold mt-4">Exchange Rate Offerings:</h4>
+                  <div className="mt-2">
+                    <ul>
+                      {showPFI.map((pfi, index) => (
+                        <li
+                          key={index}
+                          className={`p-4 bg-gray-700 rounded-lg mb-2 ${activeIndex
+                              ? 'bg-green-500'
+                              : 'bg-gray-700 hover:bg-gray-600'}`} // Conditional class for active or hover state
+                          onClick={() => handleItemClick(pfi)} // Set item as active on click
                         >
-                            Continue
-                        </button>
-                    </div>
-                )}
-            </>
-        ) : (
-            // Show the Wallet component when the form is hidden
-            <Wallet currentData={activeData} walletAddress={walletAddress} setWalletAddress={setWalletAddress} /> // Passing exchange rate from the first PFI as an example
-        )}
+                          <div className="font-semibold">{pfi.pfiName}</div>
+                          <div className="text-sm text-blue-400">
+                            {pfi.payPerUnit} {outcurr} for 1 {currency}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
+              <button
+                onClick={handleSend}
+                className="w-full py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition duration-300"
+              >
+                Continue
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        // Show the Wallet component when the form is hidden
+        <Wallet currentData={activeData} walletAddress={walletAddress} setWalletAddress={setWalletAddress} /> // Passing exchange rate from the first PFI as an example
+      )}
     </div>
+    <Footer />
+    </>
 );
 };

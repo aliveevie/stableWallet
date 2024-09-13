@@ -31,8 +31,8 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center p-4 bg-gray-800 z-10">
-        {/* Hamburger Menu Icon to toggle sidebar */}
+    <header className="flex justify-between items-center p-4 bg-gray-800">
+    {/* Hamburger Menu Icon to toggle sidebar */}
         <FaBars
           className="w-6 h-6 text-white cursor-pointer menu-button"
           onClick={handleSidebarToggle}
