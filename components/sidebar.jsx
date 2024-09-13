@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaWallet, FaPaperPlane, FaHistory, FaBars, FaHeadset } from 'react-icons/fa';
+import { FaHome, FaPaperPlane, FaHistory, FaHeadset } from 'react-icons/fa';
 
 
 export const Sidebar = () => {
@@ -8,10 +8,10 @@ export const Sidebar = () => {
     const router = useRouter(); // For navigation
   
     const menuItems = [
-      { name: 'Wallet', icon: <FaWallet />, path: '/wallet' },
-      { name: 'Send', icon: <FaPaperPlane />, path: '/send' },
-      { name: 'History', icon: <FaHistory />, path: '/transactions' },
-      { name: 'Support', icon: <FaHeadset />, path: '/support' },
+      { name: 'Home', icon: <FaHome />, path: '/pages/home' },
+      { name: 'Send', icon: <FaPaperPlane />, path: '/pages/send' },
+      { name: 'History', icon: <FaHistory />, path: '/pages/transactions' },
+      { name: 'Support', icon: <FaHeadset />, path: '/pages/support' },
     ];
   
     const handleNavigation = (path) => {
