@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaHome, FaPaperPlane, FaHistory, FaHeadset } from 'react-icons/fa';
 
-
-export const Sidebar = () => {
+export const Sidebar = ( { onClose } ) => {
     const [hovered, setHovered] = useState(null);
     const router = useRouter(); // For navigation
   
@@ -16,10 +15,11 @@ export const Sidebar = () => {
   
     const handleNavigation = (path) => {
       router.push(path); // Navigate to the respective path
+      onClose(); // Close the sidebar when a link is clicked
     };
-  
+
     return (
-      <div className="fixed top-0 left-0 h-full w-2/3 bg-gray-900 p-6 shadow-lg flex flex-col items-start sidebar">
+      <div className="fixed top-0 left-0 h-full w-2/3 bg-gray-900 p-6 shadow-lg flex flex-col items-start z-50 sidebar">
         <div className="flex flex-col items-center mb-12">
           {/* Customer Initials */}
           <div className="bg-blue-500 rounded-full w-16 h-16 flex items-center justify-center text-2xl text-white mb-2">
@@ -48,12 +48,10 @@ export const Sidebar = () => {
   
         {/* Logout Button */}
         <div className="mt-auto w-full flex justify-center">
-          <button className="bg-red-500 text-white py-2 px-6 rounded-md w-full font-semibold hover:bg-red-600 transition duration-300">
+          <button className="bg-red-500 text-white py-2 px-6 rounded-md w-full font-semibold hover:bg-red-600 transition duration-300" onClick={onClose}>
             Logout
           </button>
         </div>
       </div>
     );
-  };
-  
-  
+};

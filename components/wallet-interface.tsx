@@ -12,6 +12,7 @@ import Kenyan from '../public/icons/shilling-shilling.png';
 import Euro from '../public/icons/euro.png';
 import  Link  from 'next/link';
 import { Footer } from '@/components/footer';
+import Header from './Header';
 
 export function WalletInterface() {
   const [id, setId] = useState('');
@@ -35,16 +36,10 @@ export function WalletInterface() {
   }, []);
 
 
-
   return (
     <div className="flex flex-col w-[360px] h-[640px] bg-gray-900 text-white overflow-hidden">
-      <header className="flex justify-between items-center p-4 bg-gray-800">
-        <FaBars className="w-6 h-6 hover" />
-        <div className="flex items-center space-x-2">
-          <span className="text-sm">SW</span>
-          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-        </div>
-      </header>
+      
+      <Header />
 
       <main className="flex-1 overflow-hidden flex flex-col">
         <div className="text-center py-4">
