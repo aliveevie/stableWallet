@@ -20,7 +20,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
     const customer_id = searchParams.get('customer_id');
     const [paymentDetails, setPaymentDetails] = useState({});
 
-    console.log(currentData);
+  //  console.log(currentData);
 
   useEffect(() => {
     if (currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties) {
@@ -207,8 +207,8 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
 
                   {/* Recipient Address Section */}
 
-                <div className='overflow-y-auto' >
-                {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
+                <div className="overflow-y-auto flex-grow max-h-48 mb-4">
+                  {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
                       Object.entries(paymentDetails).map(([key, value]) => (
                           <div key={key} className="mb-2">
                               <label htmlFor={key} className="block text-sm font-bold text-gray-400 mb-2">
@@ -228,15 +228,16 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                           </div>
                       ))
                   )}
-                </div>
-              
-                  {/* Send Button */}
-                  <button
+                     <button
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
                   >
                       Send
                   </button>
+                </div>
+              
+                  {/* Send Button */}
+               
               </form>
 
               {/* Confirmation Section */}
@@ -245,13 +246,18 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                       <div className="p-6 bg-gray-800 rounded-lg shadow-lg text-center max-w-sm mx-auto">
                           <h3 className="text-lg font-bold text-white mb-4">Confirm Transaction</h3>
 
-                          <p className="text-gray-400 mb-4 leading-relaxed">
-                              Are you sure you want to send <strong>{amountToSend} {currentData.currency}</strong> (≈ <strong>{amount} {currentData.payoutcurr}</strong>) to:
-                          </p>
+                          <p className="text-gray-300 mb-6 text-center leading-relaxed">
+                                Are you sure you want to send <span className="font-semibold text-white">{amountToSend} {currentData.currency}</span> 
+                                (≈ <span className="font-semibold text-white">{amount} {currentData.payoutcurr}</span>) to <br></br> {recipientAddress} <br></br>
+                                <span className="block mt-4 text-sm text-gray-400">
+                                    Please note: A transaction fee of <span className="font-semibold text-green-400">$0.30</span> will apply after the first three transfers.
+                                </span>
+                        </p>
+
 
                           {/* Center the recipient address */}
                           <p className="text-gray-200 font-mono break-all mb-6 text-center">
-                              {recipientAddress}
+                             
                           </p>
 
                           <div className="flex justify-center space-x-4">

@@ -18,6 +18,11 @@ export const Sidebar = ( { onClose } ) => {
       onClose(); // Close the sidebar when a link is clicked
     };
 
+    const handleRouting = () => {
+        router.push('/');
+        localStorage.clear()
+    }
+
     return (
       <div className="fixed top-0 left-0 h-full w-2/3 bg-gray-900 p-6 shadow-lg flex flex-col items-start z-50 sidebar">
         <div className="flex flex-col items-center mb-12">
@@ -48,7 +53,8 @@ export const Sidebar = ( { onClose } ) => {
   
         {/* Logout Button */}
         <div className="mt-auto w-full flex justify-center">
-          <button className="bg-red-500 text-white py-2 px-6 rounded-md w-full font-semibold hover:bg-red-600 transition duration-300" onClick={onClose}>
+          <button
+          className="bg-red-500 text-white py-2 px-6 rounded-md w-full font-semibold hover:bg-red-600 transition duration-300" onClick={onClose}>
             Logout
           </button>
         </div>

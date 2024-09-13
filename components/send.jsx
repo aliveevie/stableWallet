@@ -218,7 +218,7 @@ export function Send() {
                       {showPFI.map((pfi, index) => (
                         <li
                           key={index}
-                          className={`p-4 bg-gray-700 rounded-lg mb-2 ${activeIndex === index
+                          className={`p-4 bg-gray-700 rounded-lg mb-2  cursor-pointer ${activeIndex === index
                               ?  bgColor
                               : 'bg-gray-700 hover:bg-gray-600'}`} // Conditional class for active or hover state
                           onClick={() => handleItemClick(pfi, index)} // Set item as active on click
