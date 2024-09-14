@@ -207,7 +207,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
 
                   {/* Recipient Address Section */}
 
-                <div className="overflow-y-auto flex-grow max-h-48 mb-4">
+                <div className="overflow-y-auto flex-grow max-h-48 mb-4 p-2 pb-10">
                   {currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties && (
                       Object.entries(paymentDetails).map(([key, value]) => (
                           <div key={key} className="mb-2">

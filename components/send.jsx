@@ -166,7 +166,8 @@ export function Send() {
   }
   return (
     <>
-      <div className="w-full p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
+      <Header />
+      <div className="w-full p-5 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto mt-10">
          <h2 className="text-xl font-bold mb-4">Send Funds</h2>
 
       {!walletAddress ? (
@@ -206,7 +207,7 @@ export function Send() {
           </div>
 
           {description && (
-            <div className="p-2 bg-gray-800 rounded-lg shadow-lg overflow-y-auto max-h-80">
+            <div className="p-2 bg-gray-800 rounded-lg shadow-lg overflow-y-auto max-h-80 mb-25 p-2 pb-10">
             <h3 className="text-lg font-bold mb-2">Description:</h3>
               <p>{description}</p>
 
