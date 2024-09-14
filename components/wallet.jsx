@@ -3,9 +3,10 @@ import useStore from '../functions/main';
 import ConfirmTransaction from '../app/components/confirm';
 import { useRouter } from 'next/navigation'; // For navigation on success
 import styles from '../app/styles/Wallet.module.css';
+import { FaStar } from 'react-icons/fa';
 
 const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
-    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder } = useStore();
+    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder, capitalizePfiName } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
     const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
@@ -20,7 +21,15 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
     const customer_id = searchParams.get('customer_id');
     const [paymentDetails, setPaymentDetails] = useState({});
 
-  //  console.log(currentData);
+    console.log(paymentDetails)
+
+    const [rating, setRating] = useState(0);
+
+    const handleStarClick = (index) => {
+      setRating(index + 1);
+    };
+
+ //   console.log(currentData);
 
   useEffect(() => {
     if (currentData?.offering?.data?.payout?.methods[0]?.requiredPaymentDetails?.properties) {
@@ -83,12 +92,11 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                       }else{
                         setConfirmMessage("Transaction Failed, please try again");
                         setTimeout(() => {
-                          window.location.reload(); // Reload the page after 3 seconds
+                         window.location.reload(); // Reload the page after 3 seconds
                         }, 3000);
                       }
                     });
                 }
-         
             };
             setTransactions(true);
             setConfirmMessage("Transactions in process...");
@@ -118,9 +126,9 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                 await addOrder(currentExc.id, currentExc.pfiDid).then(async () => {
                  
                     setConfirmMessage("Payment Success!");
-                    setTimeout(() => {
-                      router.push(`/pages/home`); // Redirect to the homepage after 2 seconds
-                    }, 2000); // 2-second delay before redirect
+                //    setTimeout(() => {
+                 //     router.push(`/pages/home`); // Redirect to the homepage after 2 seconds
+                 //   }, 2000); // 2-second delay before redirect
 
                /*   try {
                         const apiResponse = await fetch('/api/transactions', {
@@ -290,7 +298,38 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
                        </div>
                    )}
                    {confirmMessage === "Payment Success!" && (
-                       <p className="text-gray-400 mt-2">Redirecting Home...</p>
+                   <div className="flex flex-col items-center space-y-4">
+                     <h2 className="text-2xl font-semibold mb-2">
+                            Rate {capitalizePfiName(currentData.pfiName)}
+                    </h2>
+                    <p className="text-gray-400 text-sm mb-4">
+                            Show Your Satisfaction with the Service
+                    </p>
+                   <div className="flex space-x-2">
+                     {[...Array(5)].map((_, index) => (
+                       <FaStar
+                         key={index}
+                         className={`text-3xl cursor-pointer transition-colors duration-200 ${
+                           index < rating ? 'text-yellow-400' : 'text-gray-400'
+                         }`}
+                         onClick={() => handleStarClick(index)}
+                       />
+                     ))}
+                   </div>
+                   <div className="flex space-x-4">
+                     <button 
+                     onClick={(() => router.push('/pages/home'))}
+                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200">
+                       Home
+                     </button>
+                     <button 
+                     onClick={handleBackButton}
+                     className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200">
+                       Transfer Again
+                     </button>
+                   </div>
+                 </div>
+                      
                    )}
                </div>
            </div>

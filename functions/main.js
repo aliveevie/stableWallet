@@ -169,7 +169,9 @@ const useStore = () => {
       });
 
       const mappedExchanges =  formatMessages(exchanges);
-      console.log(mappedExchanges)
+      if(mappedExchanges){
+        console.log("Transfer Success!")
+      }
       return mappedExchanges;
     } catch (error) {
       console.error('Failed to fetch exchanges:', error);
