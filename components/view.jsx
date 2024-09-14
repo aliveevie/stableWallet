@@ -8,10 +8,9 @@ const View = () => {
   const [sign, setSign] = useState(true);
   const [pfiName, setPfiName] = useState([{}]);
 
-
   useEffect(() => {
     const handleSign = async () => {
-      const details = state.customerDid;
+      const details = state.customerCredentials.length > 0;
       if (details) {
         setSign(false);
       }

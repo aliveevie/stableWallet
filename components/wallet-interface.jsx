@@ -40,7 +40,6 @@ export function WalletInterface() {
   return (
     <>
     <div className="relative w-full h-screen bg-gray-900 text-white">
-
       <Header />
 
       <main className="flex-1 overflow-hidden flex flex-col">

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { FaCopy } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import Header from './Header';
+import { Footer } from './footer';
 
 const StoreCredentials = ({ credentials, customer_id }) => {
   
-  console.log(customer_id)
+ // console.log(customer_id)
 
   const [copied, setCopied] = useState(false);
   const router = useRouter(); // Use Next.js router for redirection
@@ -28,8 +30,6 @@ const StoreCredentials = ({ credentials, customer_id }) => {
     }
     
   };
-
- 
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-900 rounded-lg shadow-lg max-w-md mx-auto">
