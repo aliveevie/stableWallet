@@ -21,7 +21,7 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
     const customer_id = searchParams.get('customer_id');
     const [paymentDetails, setPaymentDetails] = useState({});
 
-    console.log(paymentDetails)
+    // console.log(paymentDetails)
 
     const [rating, setRating] = useState(0);
 

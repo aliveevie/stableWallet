@@ -25,10 +25,7 @@ const StoreCredentials = ({ credentials, customer_id }) => {
   };
 
   const handleContinue = async () => {
-    if(customer_id){
       router.push(`/pages/home`); // Redirect to home page after clicking "Continue"
-    }
-    
   };
 
   return (

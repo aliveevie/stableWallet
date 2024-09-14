@@ -68,8 +68,9 @@ export function Receive() {
   };
 
   return (
-    <><div className="flex flex-col w-full max-w-[360px] h-full bg-gray-900 text-white mx-auto rounded-lg shadow-lg overflow-hidden">
-        <Header />
+    <>
+    <Header />
+    <div className="flex flex-col w-full max-w-[360px] h-full bg-gray-900 text-white mx-auto rounded-lg shadow-lg overflow-hidden mt-10">
       <main className="flex-1 overflow-auto p-4">
         <Tabs defaultValue={assets[0].name} className="w-full">
           <TabsList className="grid w-full grid-cols-3 gap-1 mb-4">

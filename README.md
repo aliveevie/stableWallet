@@ -6,6 +6,10 @@ StableWallet is a decentralized financial wallet application built with the [tbD
 
 Visit the live application: [https://stablewallet.vercel.app/](https://stablewallet.vercel.app/)
 
+## Guides
+For detailed instructions on using the wallet, check the [Guides on using StableWallet](guide.md).
+
+
 ## Repository
 
 The source code is available on GitHub: [https://github.com/aliveevie/stableWallet](https://github.com/aliveevie/stableWallet)

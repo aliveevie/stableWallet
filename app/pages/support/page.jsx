@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { FaTelegramPlane, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import { Footer } from '../../../components/footer'; // Assuming you already have a Footer component
+import Header from '../../../components/Header';
 
 const Support = () => {
   const [showForm, setShowForm] = useState(false); // To toggle the form
@@ -32,10 +33,10 @@ const Support = () => {
   };
 
   return (
+    <><Header />
     <div className="container mx-auto p-4 flex flex-col justify-between h-screen bg-gray-900 text-white">
       {/* Main Content */}
       <div className="flex-grow flex flex-col justify-center items-center">
-        <h1 className="text-3xl font-bold text-center mb-6">Support</h1>
 
         {/* Contact Information */}
         {!showForm && !formSubmitted && (
@@ -111,8 +112,7 @@ const Support = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
-                required
-              />
+                required />
             </div>
 
             <div className="mb-4">
@@ -126,8 +126,7 @@ const Support = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white"
-                required
-              />
+                required />
             </div>
 
             <div className="mb-4">
@@ -140,8 +139,7 @@ const Support = () => {
                 value={formData.complaint}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-700 rounded bg-gray-700 text-white h-32"
-                required
-              />
+                required />
             </div>
 
             <button
@@ -163,7 +161,7 @@ const Support = () => {
 
       {/* Footer */}
       <Footer />
-    </div>
+    </div></>
   );
 };
 
