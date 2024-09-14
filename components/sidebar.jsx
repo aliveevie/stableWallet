@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaHome, FaPaperPlane, FaHistory, FaHeadset, FaTimes } from 'react-icons/fa';
+import useStore from "@/functions/main";
 
 export const Sidebar = ({ onClose }) => {
+
+
+  const { state, renderCredential, formatDate } = useStore();
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+  const [date, setDate] = useState('');
   const [hovered, setHovered] = useState(null);
   const router = useRouter(); // For navigation
 
@@ -23,6 +30,24 @@ export const Sidebar = ({ onClose }) => {
     router.push('/'); // Redirect to home page
   };
 
+  useEffect(() => {
+
+    const customerData = async () => {
+
+        if(state.customerCredentials[0]){
+          const data = await renderCredential(state.customerCredentials[0]);
+          if(data){
+            setName(data.name)
+            setCode(data.countryCode);
+            setDate(formatDate(new Date())); // Format the date when setting it
+          }
+        }
+      
+    }
+    customerData();
+
+  }, [state.customerCredentials])
+
   return (
     <div className="fixed top-0 left-0 h-full w-2/3 bg-gray-900 p-6 shadow-lg flex flex-col items-start z-50 sidebar">
       {/* Close Button */}
@@ -36,9 +61,11 @@ export const Sidebar = ({ onClose }) => {
       <div className="flex flex-col items-center mb-12">
         {/* Customer Initials */}
         <div className="bg-blue-500 rounded-full w-16 h-16 flex items-center justify-center text-2xl text-white mb-2">
-          S.W
+          {code}
         </div>
-        <p className="text-white font-bold text-xl">No Name</p>
+        <p className="text-white font-bold text-xl">{name}</p>
+        <p className="text-white font-bold text-sm">{date}</p>
+
       </div>
 
       {/* Menu Items */}

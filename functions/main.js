@@ -397,15 +397,17 @@ const useStore = () => {
 
   const renderCredential = async (credentialJwt) => {
     const { Jwt } = await import('@web5/credentials');
-    const vc = Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
-    return {
-      title: vc.type[vc.type.length - 1].replace(/(?<!^)(?<![A-Z])[A-Z](?=[a-z])/g, ' $&'),
-      name: vc.credentialSubject['name'],
-      countryCode: vc.credentialSubject['countryOfResidence'],
-      issuanceDate: new Date(vc.issuanceDate).toLocaleDateString(undefined, {
-        dateStyle: 'medium',
-      }),
-    };
+    if(Jwt){
+      const vc = await Jwt.parse({ jwt: credentialJwt }).decoded.payload['vc'];
+      return {
+        title: vc.type[vc.type.length - 1].replace(/(?<!^)(?<![A-Z])[A-Z](?=[a-z])/g, ' $&'),
+        name: vc.credentialSubject['name'],
+        countryCode: vc.credentialSubject['countryOfResidence'],
+        issuanceDate: new Date(vc.issuanceDate).toLocaleDateString(undefined, {
+          dateStyle: 'medium',
+        }),
+      };
+    }
   };
 
   const loadCredentials = () => {
@@ -488,6 +490,27 @@ const useStore = () => {
       .join(' ');         // Join the words back into a single string
   };
   
+
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+    const year = date.getFullYear();
+  
+    // Function to get the ordinal suffix (st, nd, rd, th)
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return 'th'; // covers 11th-19th
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+  
+    const suffix = getOrdinalSuffix(day);
+    
+    return `${day}${suffix} ${month}, ${year}`;
+  };
   
   useEffect(() => {
     const init = async () => {
@@ -519,6 +542,7 @@ const useStore = () => {
     getOfferingById,
     pollExchanges,
     capitalizePfiName,
+    formatDate,
     initializeDid,
   };
 };
