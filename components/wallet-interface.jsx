@@ -39,9 +39,8 @@ export function WalletInterface() {
 
   return (
     <>
-    <div className="relative w-full h-screen bg-gray-900 text-white">
-      <Header />
-
+    <Header />
+      <div className="relative w-full h-screen bg-gray-900 text-white mt-10 ">
       <main className="flex-1 overflow-hidden flex flex-col">
         <div className="text-center py-4">
           <h1 className="text-3xl font-bold">$1,000,000</h1>
