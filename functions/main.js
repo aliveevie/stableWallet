@@ -4,57 +4,30 @@ import { useState, useEffect, useCallback } from 'react';
 
 const mockProviderDids = {
   aquafinance_capital: {
-    uri: 'did:dht:3fkz5ssfxbriwks3iy5nwys3q5kyx64ettp9wfn1yfekfkiguj1y',
-    name: 'aquafinance_capital',
-    description: `🏦 AquaFinance Capital
-
-DID: did:dht:3fkz5ssfxbriwks3iy5nwys3q5kyx64ettp9wfn1yfekfkiguj1y
-
-Offerings:
-- GHS to USDC
-- NGN to KES
-- KES to USD
-- USD to KES`,
+    uri: 'did:dht:qewzcx3fj8uuq7y551deqdfd1wbe6ymicr8xnua3xzkdw4n6j3bo',
+    name: 'AquaFinance Capital',
+    description: 'Provides exchanges with the Ghanaian Cedis: GHS to USDC, GHS to KES'
+  },
+  swiftliquidity_solutions: {
+    uri: 'did:dht:zz3m6ph36p1d8qioqfhp5dh5j6xn49cequ1yw9jnfxbz1uyfnddy',
+    name: 'SwiftLiquidity Solutions',
+    description: 'Offers exchange rates with the South African Rand: ZAR to BTC and EUR to ZAR.'
   },
   flowback_financial: {
-    uri: 'did:dht:zkp5gbsqgzn69b3y5dtt5nnpjtdq6sxyukpzo68npsf79bmtb9zy',
-    name: 'flowback_financial',
-    description: `🏦 Flowback Financial
-
-DID: did:dht:zkp5gbsqgzn69b3y5dtt5nnpjtdq6sxyukpzo68npsf79bmtb9zy
-
-Offerings:
-- USD to EUR
-- EUR to USD
-- USD to GBP
-- USD to BTC`,
+    uri: 'did:dht:gxwaxgihty7ar5u44gcmmdbw4ka1rbpj8agu4fom6tmsaz7aoffo',
+    name: 'Flowback Financial',
+    description: 'Offers international rates with various currencies - USD to GBP, GBP to CAD.'
   },
   vertex_liquid_assets: {
-    uri: 'did:dht:enwguxo8uzqexq14xupe4o9ymxw3nzeb9uug5ijkj9rhfbf1oy5y',
-    name: 'vertex_liquid_assets',
-    description: `🏦 Vertex Liquid Assets
-
-DID: did:dht:enwguxo8uzqexq14xupe4o9ymxw3nzeb9uug5ijkj9rhfbf1oy5y
-
-Offerings:
-- EUR to USD
-- EUR to USDC
-- USD to EUR
-- EUR to GBP`,
+    uri: 'did:dht:7zkzxjf84xuy6icw6fyjcn3uw14fty4umqd3nc4f8ih881h6bjby',
+    name: 'Vertex Liquid Assets',
+    description: 'Offers currency exchanges between African currencies - MAD to EGP, GHS to NGN.'
   },
   titanium_trust: {
-    uri: 'did:dht:ozn5c51ruo7z63u1h748ug7rw5p1mq3853ytrd5gatu9a8mm8f1o',
-    name: 'titanium_trust',
-    description: `🏦 Titanium Trust
-
-DID: did:dht:ozn5c51ruo7z63u1h748ug7rw5p1mq3853ytrd5gatu9a8mm8f1o
-
-Offerings:
-- USD to AUD
-- USD to GBP
-- USD to KES
-- USD to MXN`,
-  },
+    uri: 'did:dht:kuggrw7nx3n4ehz455stdkdeuaekfjimhnbenpo8t4xz9gb8qzyy',
+    name: 'Titanium Trust',
+    description: 'Provides offerings to exchange USD to African currencies - USD to GHS, USD to KES.'
+  }
 };
 
 const useStore = () => {

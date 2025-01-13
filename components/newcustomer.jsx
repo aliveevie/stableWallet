@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import useStore from '../functions/main';
 import StoreCredentials from './storeCred';
 
+
+
 export function Newcustomer() {
   const { state, addCredential } = useStore();
   const [uri, setUri] = useState(null);
@@ -33,45 +35,63 @@ export function Newcustomer() {
     }
 
     // Fetching the credential
-    const response = await fetch(
-      `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid.uri}`
-    );
+    // const response = await fetch(
+    //   `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid.uri}`
+    // );
 
-    const credential = await response.text();
+    // const credential = await response.text();
+    const newCred = {
+      type: 'KYCCredential',
+      issuer: 'mock-issuer',
+      issuanceDate: new Date().toISOString(),
+      credentialSubject: {
+        name: customerName,
+        countryOfResidence: countryCode
+      },
+      proof: {
+        type: 'MockProof2023',
+        created: new Date().toISOString(),
+        verificationMethod: 'did:example:123#key-1',
+        proofPurpose: 'assertionMethod',
+        proofValue: 'mockSignatureABC123'
+      }
+    };
 
-    if (credential) {
-      addCredential(credential); // Storing the credential
-      setSaveCredit(credential);
+    
+
+    if (newCred) {
+     // addCredential(newCred); // Storing the credential
+      setSaveCredit(newCred.proof.verificationMethod);
       setShowCred(true); // Switch to show the credential
 
       // Now, send a POST request to the /api/create-wallet endpoint
-      try {
-        const apiResponse = await fetch('/api/create-wallet', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: customerName,
-            countryCode: countryCode,
-            credential: credential,
-          }),
-        });
+      // try {
+      //   const apiResponse = await fetch('/api/create-wallet', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       name: customerName,
+      //       countryCode: countryCode,
+      //       credential: newCred,
+      //     }),
+      //   });
 
-        const jsonResponse = await apiResponse.json();
+      //   const jsonResponse = await apiResponse.json();
 
-        if (jsonResponse && jsonResponse.customer) {
-          // Store the customer_id returned from the API response
-          setCustomerId(jsonResponse.customer.customer_id);
-        }
+      //   if (jsonResponse && jsonResponse.customer) {
+      //     // Store the customer_id returned from the API response
+      //     setCustomerId(jsonResponse.customer.customer_id);
+      //   }
 
-        if (!apiResponse.ok) {
-          throw new Error('Failed to create wallet');
-        }
-      } catch (err) {
-        console.error('Error sending POST request:', err);
-        setError('Failed to create wallet. Please try again.');
-      }
+      //   if (!apiResponse.ok) {
+      //     throw new Error('Failed to create wallet');
+      //   }
+      // } catch (err) {
+      //   console.error('Error sending POST request:', err);
+      //   setError('Failed to create wallet. Please try again.');
+      // }
     } else {
       setError('Failed to create credential. Please try again.');
     }
