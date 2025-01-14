@@ -1,18 +1,16 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import useStore from '../functions/main';  // Import your store functions
 import Loader from './loader';  // Import the loader component
 import Wallet from './wallet';
 import Header from './Header';
 import { Footer } from './footer';
 import mockPFIs from '../mockData';
 
+
 export function Send() {
-  const { capitalizePfiName } = useStore();
   const [state, setState] = useState('');  // Get the state and setState from the store
   const [walletAddress, setWalletAddress] = useState(false);
   const [currency, setCurrency] = useState('');  // PayIn currency
-  const [crypto, setCrypto] = useState('');  // Payout currency
   const [payIn, setPayIn] = useState([]);  // PayIn currencies list
   const [payout, setPayout] = useState([]);  // Payout currencies list
   const [loading, setLoading] = useState(true); // Track loading state
@@ -251,7 +249,7 @@ export function Send() {
                               : 'bg-gray-700 hover:bg-gray-600'}`} // Conditional class for active or hover state
                           onClick={() => handleItemClick(pfi, index)} // Set item as active on click
                         >
-                          <div className="font-semibold">{capitalizePfiName(pfi.pfiName)}</div>
+                          <div className="font-semibold">{pfi.pfiName}</div>
                           <div className="text-sm text-blue-400">
                             {pfi.payPerUnit} {outcurr} for 1 {currency}
                           </div>
