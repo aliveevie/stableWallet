@@ -1,45 +1,28 @@
 "use client";
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import useStore from '../functions/main';
+import { useState } from 'react';
 import StoreCredentials from './storeCred';
 
-
-
 export function Newcustomer() {
-  const { state, addCredential } = useStore();
-  const [uri, setUri] = useState(null);
   const [showCred, setShowCred] = useState(false); // Used to toggle the view
   const [saveCred, setSaveCredit] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [countryCode, setCountryCode] = useState('');
   const [error, setError] = useState('');
-  const [customerId, setCustomerId] = useState(''); // Correct variable for customer_id
-  const [data, setData] = useState('');
 
-  useEffect(() => {
-    if (state.customerDid && state.customerCredentials.length > 0) {
-      //   setShowCred(true);
-      //   setSaveCredit(state.customerCredentials[0]);
-    }
-  }, [state.customerDid, state.customerCredentials]);
+  const generateMockDID = () => {
+    const timestamp = Date.now();
+    const randomSuffix = Math.random().toString(36).substring(2, 15);
+    return `did:example:${timestamp}${randomSuffix}`;
+  };
+
+  const customerDid = { uri: generateMockDID() }; // Using the mock DID generator
+
+  
 
   const createCredential = async (e) => {
     e.preventDefault();
-
-    // Fetching customer DID
-    const customerDid = state.customerDid;
-    if (customerDid) {
-      setUri(customerDid.uri);
-    }
-
-    // Fetching the credential
-    // const response = await fetch(
-    //   `https://mock-idv.tbddev.org/kcc?name=${customerName}&country=${countryCode}&did=${customerDid.uri}`
-    // );
-
-    // const credential = await response.text();
     const newCred = {
       type: 'KYCCredential',
       issuer: 'mock-issuer',
@@ -51,59 +34,20 @@ export function Newcustomer() {
       proof: {
         type: 'MockProof2023',
         created: new Date().toISOString(),
-        verificationMethod: 'did:example:123#key-1',
+        verificationMethod: customerDid.uri + "#key-" + (Math.floor(Math.random() * 3) + 1),
         proofPurpose: 'assertionMethod',
         proofValue: 'mockSignatureABC123'
       }
     };
 
-    
-
     if (newCred) {
      // addCredential(newCred); // Storing the credential
       setSaveCredit(newCred.proof.verificationMethod);
       setShowCred(true); // Switch to show the credential
-
-      // Now, send a POST request to the /api/create-wallet endpoint
-      // try {
-      //   const apiResponse = await fetch('/api/create-wallet', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({
-      //       name: customerName,
-      //       countryCode: countryCode,
-      //       credential: newCred,
-      //     }),
-      //   });
-
-      //   const jsonResponse = await apiResponse.json();
-
-      //   if (jsonResponse && jsonResponse.customer) {
-      //     // Store the customer_id returned from the API response
-      //     setCustomerId(jsonResponse.customer.customer_id);
-      //   }
-
-      //   if (!apiResponse.ok) {
-      //     throw new Error('Failed to create wallet');
-      //   }
-      // } catch (err) {
-      //   console.error('Error sending POST request:', err);
-      //   setError('Failed to create wallet. Please try again.');
-      // }
     } else {
       setError('Failed to create credential. Please try again.');
     }
   };
-
-  useEffect(() => {
-    if (customerId) {
-      setShowCred(true);
-      setSaveCredit(state.customerCredentials[0]);
-      console.log(customerId)
-    }
-  }, [customerId]);
 
   return (
     <>
@@ -186,7 +130,7 @@ export function Newcustomer() {
           </form>
         </div>
       ) : (
-        <StoreCredentials credentials={saveCred} customer_id={customerId} />
+        <StoreCredentials credentials={saveCred} customer_id={12} />
       )}
     </>
   );
