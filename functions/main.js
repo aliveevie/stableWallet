@@ -487,15 +487,15 @@ const useStore = () => {
     return `${day}${suffix} ${month}, ${year}`;
   };
   
-  useEffect(() => {
-    const init = async () => {
-    await initializeDid();
-    loadCredentials();
-    await fetchOfferings();
-    // localStorage.clear();
-    };
-    init();
-  }, [fetchOfferings, initializeDid]);
+  // useEffect(() => {
+  //   const init = async () => {
+  //   await initializeDid();
+  //   loadCredentials();
+  //   await fetchOfferings();
+  //   // localStorage.clear();
+  //   };
+  //   init();
+  // }, [fetchOfferings, initializeDid]);
 
   return {
     state,
