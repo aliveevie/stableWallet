@@ -6,7 +6,7 @@ import styles from '../app/styles/Wallet.module.css';
 import { FaStar } from 'react-icons/fa';
 
 const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
-    const { state, formatAmount, createExchange, pollExchanges, fetchExchanges, addOrder, capitalizePfiName } = useStore();
+    const { formatAmount, capitalizePfiName } = useStore();
     const [amountToSend, setAmountToSend] = useState('');
     const [amount, setAmount] = useState(''); // Simulated exchange rate to USD
     const [recipientAmount, setRecipientAmount] = useState(''); // Amount recipient will receive
@@ -22,6 +22,8 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
     const [paymentDetails, setPaymentDetails] = useState({});
 
     // console.log(paymentDetails)
+
+    console.log(currentData);
 
     const [rating, setRating] = useState(0);
 
@@ -75,40 +77,59 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
         }
     };
 
+    const mockAddOrder = async (id, pfiDid) => {
+        console.log("Mock: Adding order with", { id, pfiDid });
+        // Simulate a delay to mimic async behavior
+        return new Promise((resolve) => setTimeout(() => resolve(true), 1000));
+      };
+      
     const handleConfirm = () => {
-     //   setAmountToSend('');
-     //   setRecipientAddress('');
-     //   setRecipientAmount('');
-     //   setAmount('');
+        // Reset the confirmation state
         setIsConfirming(false);
-
+      
+        // Mocking necessary dependencies
+        const createExchange = async (offering, amount, paymentDetails) => {
+          console.log("Mock: Creating exchange with", { offering, amount, paymentDetails });
+          return Promise.resolve(true); // Simulate successful exchange creation
+        };
+      
+        const fetchExchanges = async (from) => {
+          console.log("Mock: Fetching exchanges for", { from });
+          return Promise.resolve([
+            { id: 1, status: "success", from },
+          ]); // Simulate fetching successful exchange data
+        };
+      
         try {
-            const dataFetch = async () => {
-                if(paymentDetails){
-                    await createExchange(currentData.offering, amount, paymentDetails).then(async () => {
-                        const data = await fetchExchanges(currentData.offering.metadata.from);
-                        if (data) {
-                            setExchange(data);
-                      }else{
-                        setConfirmMessage("Transaction Failed, please try again");
-                        setTimeout(() => {
-                         window.location.reload(); // Reload the page after 3 seconds
-                        }, 3000);
-                      }
-                    });
+          const dataFetch = async () => {
+            if (paymentDetails) {
+              await createExchange(currentData.offering, amount, paymentDetails).then(async () => {
+                const data = await fetchExchanges(currentData.offering.metadata.from);
+                if (data && data.length > 0) {
+                  setExchange(data);
+                } else {
+                  setConfirmMessage("Transaction Failed, please try again");
+                  setTimeout(() => {
+                    window.location.reload(); // Reload the page after 3 seconds
+                  }, 3000);
                 }
-            };
-            setTransactions(true);
-            setConfirmMessage("Transactions in process...");
-            dataFetch();
-        }catch  {
-            console.error("Error creating exchange or fetching exchanges:", error);
-            setConfirmMessage("Transaction Failed, please try again");
-            setTimeout(() => {
-              window.location.reload(); // Reload the page after 3 seconds
-            }, 3000);
+              });
+            }
+          };
+      
+          setTransactions(true);
+          setConfirmMessage("Transactions in process...");
+          dataFetch();
+        } catch (error) {
+          console.error("Error creating exchange or fetching exchanges:", error);
+          setConfirmMessage("Transaction Failed, please try again");
+          setTimeout(() => {
+            window.location.reload(); // Reload the page after 3 seconds
+          }, 3000);
         }
-    };
+      };
+      
+
 
     const handleCancel = () => {
         // Cancel the transaction and go back to the form
@@ -117,60 +138,27 @@ const Wallet = ({ currentData, walletAddress, setWalletAddress }) => {
 
     useEffect(() => {
         if (exchange) {
-         //   console.log(exchange)
-            setCurrentExc(exchange[exchange.length - 1]);
+          // Set the most recent exchange as the current one
+          setCurrentExc(exchange[exchange.length - 1]);
         }
-
+      
         const sendCurrency = async () => {
-            if (currentExc) {
-                await addOrder(currentExc.id, currentExc.pfiDid).then(async () => {
-                 
-                    setConfirmMessage("Payment Success!");
-                //    setTimeout(() => {
-                 //     router.push(`/pages/home`); // Redirect to the homepage after 2 seconds
-                 //   }, 2000); // 2-second delay before redirect
-
-               /*   try {
-                        const apiResponse = await fetch('/api/transactions', {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify({
-                            customer_id: customer_id,
-                            PFIS_name: currentData.pfiName, // Assuming PFIS_name is fetched from currentData.offering
-                            recipient_address: recipientAddress, // Address from the form input
-                            from_currency: currentData.currency, // From currency from currentData
-                            to_currency: currentData.payoutcurr, // To currency from currentData
-                            amount: amountToSend, // Amount to send from the form input
-                            date: new Date().toISOString() // Optional: current date
-                          }),
-                        });
-                      
-                     const response = await apiResponse.json();
-                        if (response.message == 'Transaction inserted successfully') {
-                          setConfirmMessage("Payment Success!");
-                          setTimeout(() => {
-                            router.push(`/home?customer_id=${customer_id}`); // Redirect to the homepage after 2 seconds
-                          }, 2000); // 2-second delay before redirect
-                        }else{
-                            setConfirmMessage("Transaction Failed please try again");
-                            setTimeout(() => {
-                                window.reload(); // Redirect to the homepage after 2 seconds
-                              }, 3000); // 2-second delay before redirect
-                        }
-                      
-                        if (!apiResponse.ok) {
-                          throw new Error('Failed to create transaction');
-                        }
-                      } catch (err) {
-                        console.error('Error sending POST request:', err);
-                      } */ 
-                });
+          if (currentExc) {
+            try {
+              // Replace addOrder with mockAddOrder
+              await mockAddOrder(currentExc.id, currentExc.pfiDid).then(() => {
+                setConfirmMessage("Payment Success!");
+              });
+            } catch (error) {
+              console.error("Error in adding order:", error);
+              setConfirmMessage("Payment Failed. Please try again.");
             }
+          }
         };
+      
         sendCurrency();
-    }, [exchange, currentExc, router]);
+      }, [exchange, currentExc, router]);
+      
 
     return (
         <>
