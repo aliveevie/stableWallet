@@ -13,11 +13,8 @@ import Euro from '../public/icons/euro.png';
 import  Link  from 'next/link';
 import { Footer } from '@/components/footer';
 import Header from './Header';
-import Horizontal from './vertical';
 
 export function WalletInterface() {
-  const [id, setId] = useState('');
-  const [balance, setBalance] = useState(100)
   const [assets, setAssets] = useState([
     { name: 'Nigerian Naira', amount: 0, value: 0.0, icon: Naira, symbol: 'Naira', sym: '₦' },
     { name: 'Ghanaian Cedi', amount: 0, value: 0.0, icon: Cedi, symbol: 'Ghana Cedi', sym: '₵' },
@@ -26,15 +23,8 @@ export function WalletInterface() {
     { name: 'Euro', amount: 0, value: 0, icon: Euro, symbol: 'Euro', sym: '£'},
   ]);
 
-  useEffect(() => {
-    // Extract customer_id from the query string
-    const searchParams = new URLSearchParams(window.location.search);
-    const customer_id = searchParams.get('customer_id');
-    
-    if (customer_id) {
-      setId(customer_id); // Set the customer_id to the state
-    }
-  }, []);
+
+
 
 
   return (
@@ -51,7 +41,6 @@ export function WalletInterface() {
             <Button variant="outline" className="flex flex-col items-center p-2 bg-gray-800 hover:bg-gray-700">
               <FaPaperPlane className="w-20 h-20 mb-1" />
               <span className="text-xs">Send</span>
-
             </Button>
           </Link>
 

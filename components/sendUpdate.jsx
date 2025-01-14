@@ -26,7 +26,7 @@ export function Send() {
   const [outcurr, setOurcurr] = useState('');
   const [activeIndex, setActiveIndex] = useState(false);
   const [activeData, setActiveData] = useState(null);
-  const [bgColor, setBgColor] = useState("bg-gray-700"); // To track background color of the clicked item
+  const [bgColor, setBgColor] = useState("bg-gray-100"); // To track background color of the clicked item
 
 
   const handleSend = () => {
@@ -41,7 +41,7 @@ export function Send() {
     const handleItemClick = (pfi, index) => {
         setActiveIndex(index); // Set the active index
         setActiveData(pfi)
-        setBgColor("bg-green-500");
+        setBgColor("bg-green-700");
     };
 
     const handleCurrencyChange = (e) => {
